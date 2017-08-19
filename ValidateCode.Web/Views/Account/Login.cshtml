@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+    var title = @CustomHelper.GetValue("Website-Titlte");
+}
+@using ValidateCode.Core.Helper
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@title - 登录</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <meta name="keywords" content="@title - 登录"/>
+    <link href="~/Styles/reg.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="main">
+        <div class="header">
+            <h1>@title - 登录</h1>
+        </div>
+        <form>
+            <ul class="dataform">
+                <li>
+                    <lable class="info">账号:</lable><input type="text" placeholder="账号" required  id="account"/>
+                    <div class="clear"> </div>
+                </li>
+                <li>
+                    <lable class="info">密码:</lable><input type="password" placeholder="请输入密码" required id="password"/>
+                    <div class="clear"> </div>
+                </li>
+                <li>
+                    <lable class="info">验证码:</lable><input type="password" placeholder="请输入验证码" required id="ValiteCode" />
+                    <img id="img_code" style="width:30%;height:2rem;float:left;" alt="" title="点击重新获取" src="/account/validatecode" onclick="javascript:$(this).attr('src','/account/validatecode?r='+Math.random());" />
+                    <div class="clear"> </div>
+                </li>
+                <button  class="submit-btn" >登录</button>
+                <p class="registered">还没账号?<a href="/Account/Register">立即注册</a></p>
+                <div class="clear"> </div>
+            </ul>
+            <div class="clear"> </div>
+
+        </form>
+
+    </div>
+
+    <div class="copy-rights">
+        <p>Copyright &copy;@CustomHelper.GetValue("Company_Statement")</p>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(".submit-btn").on("click",function (event) {
+            var account = $("#account").val();
+            var password = $("#password").val();
+            var code = $("#password").val();
+            if (account == "") {
+                alert("请输入账号");
+                return false;
+            }
+            if (password == "") {
+                alert("请输入密码");
+                return false;
+            }
+            if (code == "") {
+                alert("请输入验证码");
+                return false;
+            }
+            $.ajax({
+                type: 'get',
+                url: "/account/Submit",
+                data: { account: account, password: password ,code:code},
+                success: function (data) {
+                    if (data.Result==1) {
+                        window.location.href = "/Home/index";
+                    }
+                    else if (data.Result == 2) {
+                        window.location.href = "/Home/Admin";
+                    }
+                    else {
+                        alert(data.ErrorDesc);
+                    }
+                }
+            });
+            return false;
+        })
+
+    </script>
+</body>
+</html>          
