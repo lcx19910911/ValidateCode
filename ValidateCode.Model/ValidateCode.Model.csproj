@@ -63,7 +63,9 @@
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recharge.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Withdrawals.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

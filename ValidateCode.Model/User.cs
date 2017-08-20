@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace ValidateCode.Model
 {
@@ -45,20 +46,17 @@ namespace ValidateCode.Model
         /// 手机号码
         /// </summary>
         [Display(Name = "手机号码"), MaxLength(32)]
-        [Required]
         public string MobilePhone { get; set; }
 
         /// <summary>
         /// 真实姓名
         /// </summary>
         [Display(Name = "QQ"), MaxLength(32)]
-        [Required]
         public string QQ { get; set; }
         /// <summary>
         /// 邮箱
         /// </summary>
         [Display(Name = "邮箱"), MaxLength(126)]
-        [Required]
         public string Email { get; set; }
 
 
@@ -75,6 +73,27 @@ namespace ValidateCode.Model
         [Required]
         public string AliPayAccount { get; set; }
 
+        public decimal Balance { get; set; }
+
+        /// <summary>
+        /// 充值总额
+        /// </summary>
+        [Display(Name = "充值总额")]
+        public int TotalRecharge { get; set; }
+        [JsonIgnore]
+        public virtual List<Recharge> UserRecharges { get; set; }
+        [JsonIgnore]
+        public virtual List<Recharge> CreateRecharges { get; set; }
+
+        /// <summary>
+        /// 提现总额
+        /// </summary>
+        [Display(Name = "提现总额")]
+        public int TotalWithdrawals { get; set; }
+        [JsonIgnore]
+        public virtual List<Withdrawals> UserWithdrawals { get; set; }
+        [JsonIgnore]
+        public virtual List<Withdrawals> AuditWithdrawals { get; set; }
     }
 
     public enum UserType

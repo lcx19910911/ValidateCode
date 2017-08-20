@@ -81,6 +81,8 @@ namespace ValidateCode.DB
         
 
         public DbSet<User> User { get; set; }
+        public DbSet<Recharge> Recharge { get; set; }
+        public DbSet<Withdrawals> Withdrawals { get; set; }
     }
 
 }
