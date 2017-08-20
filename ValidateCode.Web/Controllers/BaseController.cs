@@ -220,9 +220,9 @@ namespace ValidateCode.Web.Controllers
         }
 
 
-        private User _loginUser = null;
+        private LoginUser _loginUser = null;
 
-        public User LoginUser
+        public LoginUser LoginUser
         {
             get
             {
@@ -230,7 +230,7 @@ namespace ValidateCode.Web.Controllers
                 {
                     var cookie = this.Request.Cookies[Params.UserCookieName];
                     if (cookie != null)
-                        return CryptoHelper.AES_Decrypt(this.Request.Cookies[Params.UserCookieName].Value, Params.SecretKey).DeserializeJson<User>();
+                        return CryptoHelper.AES_Decrypt(this.Request.Cookies[Params.UserCookieName].Value, Params.SecretKey).DeserializeJson<LoginUser>();
                     else
                         return null;
                 }

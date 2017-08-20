@@ -29,7 +29,12 @@ namespace ValidateCode.Web.Filters
 
             if (controller.LoginUser == null)
             {
-                if (!controllerName.Equals("login", StringComparison.OrdinalIgnoreCase))
+                if (areaName != null)
+                {
+                        RedirectResult redirectResult = new RedirectResult("/account/adminlogin?redirecturl=" + requestUrl);
+                        filterContext.Result = redirectResult;
+                }
+                else if (!controllerName.Equals("login", StringComparison.OrdinalIgnoreCase))
                 {
                     var actionMethod = actionMethodList.Where(x => x.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                     if (actionMethod != null)
@@ -55,7 +60,7 @@ namespace ValidateCode.Web.Filters
                 {
                     if (!controller.LoginUser.Account.Equals("Admin",StringComparison.OrdinalIgnoreCase))
                     {
-                        RedirectResult redirectResult = new RedirectResult("/account/login?redirecturl=" + requestUrl);
+                        RedirectResult redirectResult = new RedirectResult("/account/adminlogin?redirecturl=" + requestUrl);
                         filterContext.Result = redirectResult;
                     }
                 }

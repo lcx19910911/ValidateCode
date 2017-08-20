@@ -16,7 +16,7 @@ using ValidateCode.Core.Core;
 
 namespace ValidateCode.Service
 {
-    public class BaseService<T>: IBaseService<T> where T:BaseEntity
+    public class BaseService<T>: IBaseService<T> where T:base_entity
     {
         /// <summary>
         /// 请求context
@@ -57,7 +57,7 @@ namespace ValidateCode.Service
                 var addEntity = source.AutoMap<T>();
                 db.Entry(addEntity).State = System.Data.Entity.EntityState.Added;
                 if (db.SaveChanges() > 0)
-                    return addEntity.ID;
+                    return addEntity.id;
                 else
                     return 0;
             }
@@ -82,7 +82,7 @@ namespace ValidateCode.Service
                     var entity = dbSet.Find(ID);
                     if (entity != null)
                     {
-                        entity.IsDelete = true;
+                        entity.statu = EntityStatu.delete;
                     }
                 }
                 return db.SaveChanges();
@@ -103,7 +103,7 @@ namespace ValidateCode.Service
                 var list = dbSet.Where(predicate).ToList();
                 list.ForEach(entity =>
                 {
-                    entity.IsDelete = true;
+                    entity.statu = EntityStatu.delete;
                 });
                 return db.SaveChanges();
             }
@@ -135,7 +135,7 @@ namespace ValidateCode.Service
             using (DbRepository db = new DbRepository())
             {
                 DbSet<T> dbSet = db.Set<T>();
-                return dbSet.Where(x => !x.IsDelete).Where(predicate).FirstOrDefault();
+                return dbSet.Where(x => x.statu!=EntityStatu.delete).Where(predicate).FirstOrDefault();
             }
         }
 
@@ -149,7 +149,7 @@ namespace ValidateCode.Service
             using (DbRepository db = new DbRepository())
             {
                 DbSet<T> dbSet = db.Set<T>();
-                return dbSet.Where(x => !x.IsDelete).Where(predicate).Count();
+                return dbSet.Where(x => x.statu != EntityStatu.delete).Where(predicate).Count();
             }
         }
 
@@ -178,16 +178,16 @@ namespace ValidateCode.Service
                 if (predicate != null)
                 {
                     if(takeCount==0)
-                        return dbSet.Where(x => !x.IsDelete).Where(predicate).ToList();
+                        return dbSet.Where(x => x.statu != EntityStatu.delete).Where(predicate).ToList();
                     else//.OrderByDescending(x => x.CreatedTime)
-                        return dbSet.Where(x => !x.IsDelete).Where(predicate).Take(takeCount).ToList();
+                        return dbSet.Where(x => x.statu != EntityStatu.delete).Where(predicate).Take(takeCount).ToList();
                 }
                 else
                 {
                     if (takeCount == 0)
-                        return dbSet.Where(x => !x.IsDelete).ToList();
+                        return dbSet.Where(x => x.statu != EntityStatu.delete).ToList();
                     else
-                        return dbSet.Where(x => !x.IsDelete).Take(takeCount).ToList();
+                        return dbSet.Where(x => x.statu != EntityStatu.delete).Take(takeCount).ToList();
                 }
             }
         }       
@@ -201,7 +201,7 @@ namespace ValidateCode.Service
             using (DbRepository db = new DbRepository())
             {
                 DbSet<T> dbSet = db.Set<T>();
-                var sourceEntity =ID==null?dbSet.Find(source.ID): dbSet.Find(ID);
+                var sourceEntity =ID==null?dbSet.Find(source.id): dbSet.Find(ID);
                 if (sourceEntity != null)
                 {
                     //source.AutoMap<T>(sourceEntity);

@@ -18,9 +18,9 @@ namespace ValidateCode.Service
     /// <summary>
     /// 微信用户
     /// </summary>
-    public class UserService : BaseService<User>, IUserService
+    public class AdminUserService : BaseService<admin_user>, IAdminUserService
     {
-        public UserService()
+        public AdminUserService()
         {
             base.ContextCurrent = HttpContext.Current;
         }
@@ -31,18 +31,18 @@ namespace ValidateCode.Service
         /// <param name="account">账号</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public WebResult<User> Login(string account, string password,string code)
+        public WebResult<admin_user> Login(string name, string password,string code)
         {
             using (DbRepository entities = new DbRepository())
             {
                 var realCode = CacheHelper.Get<string>("validate_code" + Client.IP);
                 if (code.IsNullOrEmpty() || !code.Equals(code, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return Result(new User() { }, ErrorCode.verification_time_out);
+                    return Result(new admin_user() { }, ErrorCode.verification_time_out);
                 }
                 string md5Password = Core.Util.CryptoHelper.MD5_Encrypt(password);
 
-                return Result(Find(x => x.Account == account && x.Password == md5Password && !x.IsDelete));
+                return Result(Find(x => x.account == name && x.password == md5Password && x.statu != EntityStatu.delete));
             }
         }
 
@@ -51,15 +51,15 @@ namespace ValidateCode.Service
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public WebResult<bool> Manager(User model)
+        public WebResult<bool> Manager(admin_user model)
         {
-            var user = Find(model.ID);
+            var user = Find(model.id);
             if (user == null)
             {
                 int id=Add(model);
                 if (id > 0)
                 {
-                    LoginHelper.CreateUser(model);
+                    LoginHelper.CreateUser(new LoginUser(id,model.account,false));
                     return Result(true);
                 }
                 else
@@ -68,14 +68,9 @@ namespace ValidateCode.Service
             else
             {
 
-                if (IsExits(x => x.Account == model.Account && x.ID != model.ID))
+                if (IsExits(x => x.account == model.account && x.id != model.id))
                     return Result(false, ErrorCode.user_account_already_exist);
               
-                user.QQ = model.QQ;
-                user.AliPayAccount = model.AliPayAccount;
-                user.Email = model.Email;
-                user.AliPayName = model.AliPayName;
-                user.MobilePhone = model.MobilePhone;
                 int result=Update(user);
                 if (result > 0)
                 {
@@ -95,25 +90,17 @@ namespace ValidateCode.Service
         /// <param name="pageSize">分页大小</param>
         /// <param name="title">标题 - 搜索项</param>
         /// <returns></returns>
-        public PageList<User> GetPageList(int pageIndex, int pageSize, string account, string phone, UserType? type)
+        public PageList<admin_user> GetPageList(int pageIndex, int pageSize, string account)
         {
             using (DbRepository db = new DbRepository())
             {
-                var query = db.User.Where(x => !x.IsDelete);
+                var query = db.admin_user.Where(x => x.statu != EntityStatu.delete);
                 if (account.IsNotNullOrEmpty())
                 {
-                    query = query.Where(x => x.Account.Contains(account));
-                }
-                if (phone.IsNotNullOrEmpty())
-                {
-                    query = query.Where(x => x.MobilePhone.Contains(phone));
-                }
-                if (type != null)
-                {
-                    query = query.Where(x => x.Type == type);
+                    query = query.Where(x => x.account.Contains(account));
                 }
                 var count = query.Count();
-                var list = query.OrderByDescending(x => x.CreatedTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                var list = query.OrderByDescending(x => x.created_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
                 list.ForEach(x =>
                 {
                     if (x != null)
@@ -150,11 +137,11 @@ namespace ValidateCode.Service
             if (oldPassword == "")
             {
                 oldPassword = CryptoHelper.MD5_Encrypt(oldPassword);
-                if (!user.Password.Equals(oldPassword))
+                if (!user.password.Equals(oldPassword))
                     return Result(false, ErrorCode.user_password_nottrue);
             }
             newPassword = CryptoHelper.MD5_Encrypt(newPassword);
-            user.Password = newPassword;
+            user.password = newPassword;
             Update(user);
             return Result(true);
         }

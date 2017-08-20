@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using ValidateCode.Core.Extensions;
 using ValidateCode.Core.Helper;
+using ValidateCode.Core.Model;
 using ValidateCode.Model;
 
 namespace ValidateCode.Core
@@ -15,7 +16,7 @@ namespace ValidateCode.Core
     {
        
 
-        public static void CreateUser(User user)
+        public static void CreateUser(LoginUser user)
         {
             HttpCookie cookie = new HttpCookie(Params.UserCookieName);
             cookie.Value = CryptoHelper.AES_Encrypt(user.ToJson(), Params.SecretKey);
@@ -42,12 +43,12 @@ namespace ValidateCode.Core
         /// 获取当前用户
         /// </summary>
         /// <returns></returns>
-        public static User GetCurrentUser()
+        public static LoginUser GetCurrentUser()
         {
             HttpCookie cookie = HttpContext.Current.Request.Cookies[Params.UserCookieName];
             if (cookie == null)
                 return null;
-            User user = (CryptoHelper.AES_Decrypt(cookie.Value, Params.SecretKey)).DeserializeJson<User>();
+            var user = (CryptoHelper.AES_Decrypt(cookie.Value, Params.SecretKey)).DeserializeJson<LoginUser>();
             return user;
         }
 

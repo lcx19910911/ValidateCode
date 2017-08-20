@@ -25,7 +25,7 @@ namespace ValidateCode.Core.Core
         /// <param name="source">原始对象</param>
         /// <param name="destination">目标对象</param>
         /// <returns>映射结果</returns>
-        public static TSource AutoMap<TSource>(this TSource source, TSource destination) where TSource : BaseEntity
+        public static TSource AutoMap<TSource>(this TSource source, TSource destination) where TSource : base_entity
         {
 
             List<TSource> sourceList = new List<TSource>() { source };
@@ -40,7 +40,7 @@ namespace ValidateCode.Core.Core
         /// <typeparam name="TSource">目标类型</typeparam>
         /// <param name="source">原始对象</param>
         /// <returns>映射结果</returns>
-        public static TSource AutoMap<TSource>(this TSource source) where TSource : BaseEntity
+        public static TSource AutoMap<TSource>(this TSource source) where TSource : base_entity
         {
             List<TSource> list = new List<TSource>() { source };
             return list.AutoMap<TSource>().First();
@@ -53,7 +53,7 @@ namespace ValidateCode.Core.Core
         /// <typeparam name="TSource">目标类型</typeparam>
         /// <param name="sourceList">原始列表</param>
         /// <returns></returns>
-        public static List<TSource> AutoMap<TSource>(this List<TSource> sourceList, List<TSource> destinationList = null) where TSource : BaseEntity
+        public static List<TSource> AutoMap<TSource>(this List<TSource> sourceList, List<TSource> destinationList = null) where TSource : base_entity
         {
             Dictionary<object, TSource> targetDictionary = new Dictionary<object, TSource>();
             if (destinationList != null && destinationList.Count > 0)
@@ -66,9 +66,8 @@ namespace ValidateCode.Core.Core
 
                     AutoMapper.Mapper.CreateMap<TSource, TSource>().BeforeMap((x, y) => {
                         var oldEntity =y as  TSource;
-                        x.CreatedTime = oldEntity.CreatedTime;
-                        x.ID = oldEntity.ID;
-                        x.IsDelete = oldEntity.IsDelete;
+                        x.id = oldEntity.id;
+                        x.statu = oldEntity.statu;
                     });
 
                     //使用autoMapper映射                
@@ -110,7 +109,7 @@ namespace ValidateCode.Core.Core
         /// <typeparam name="TSource">目标类型</typeparam>
         /// <param name="source">原始对象</param>
         /// <returns></returns>
-        public static PageList<TSource> AutoMap<TSource>(this PageList<TSource> source) where TSource : BaseEntity
+        public static PageList<TSource> AutoMap<TSource>(this PageList<TSource> source) where TSource : base_entity
         {
             PageList<TSource> list = new PageList<TSource>(source.List.AutoMap<TSource>(), source.PageIndex, source.PageSize, source.RecordCount);
             return list;

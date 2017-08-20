@@ -1,5 +1,5 @@
 ﻿@{
-    var currentUser = LoginHelper.GetCurrentUser();
+
 }
 <!doctype html>
 <html class="no-js fixed-layout">
@@ -7,180 +7,126 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="shortcut icon" href="../images/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-    <title>@ViewBag.Title</title>
-    <link href="~/Styles/css/amazeui.css" rel="stylesheet" />
-    @Styles.Render("~/Content/Admin")
+    <title>@CustomHelper.GetValue("Website-Titlte")-管理后台</title>
+    <link href="/Styles/css/amazeui.css" rel="stylesheet" />
+    <link href="/Styles/css/amazeui.css" rel="stylesheet" />
+    <link href="/Scripts/tipso/css/tipso.min.css" rel="stylesheet" />
+    <link href="/Styles/admin.css" rel="stylesheet" />
+    <link href="/Scripts/My97DatePicker/skin/WdatePicker.css" rel="stylesheet" />
+    <link href="/Styles/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+
+
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+    <script src="/Scripts/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/Scripts/jquery.form.js"></script>
+    <script src="/Scripts/amazeui.min.js"></script>
+    <script src="/Scripts/tipso/js/tipso.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.core.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.grid.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.form.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.other.js"></script>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <script src="/Scripts/My97DatePicker/config.js"></script>
+    <script src="/Scripts/My97DatePicker/lang/zh-cn.js"></script>
+    <script src="/Scripts/file_upload_plug-in.js"></script>
+    <script src="/Scripts/jquery.ztree.all-3.5.min.js"></script>
+    <script src="/Scripts/ztree-select.js"></script>
     @RenderSection("linkcss", required: false)
-    @Scripts.Render("~/Scripts/Admin")
+    <style>
+        [class*=am-icon-] {
+            display: inline-block;
+            font-style: normal;
+        }
+    </style>
     <script>
-        function changePassword(id) {
+        function userInfo() {
 
             $.Nuoya.ajaxDialog({
                 closeViaDimmer: false,
-                width: "800px",
-                height: "280px",
-                ajaxUrl: "/Areas/Admin/HtmlTemplates/User/ChangePassword.html",
+                addIframe: true,
+                width: (isForPhone ? (($(window).width() - 40) + "px") : "1200px"),
+                height: (isForPhone ? (($(window).height() - 300) + "px") : "780px"),
+                ajaxUrl: "/Account/Register?info=true&id=@(LoginHelper.GetCurrentUser().ID)",
+                title: "作者信息",
+                callback: function (e) {
+                    $(window.frames["alrtIframe"]).css("width", "90%");
+                    //iframeObj.find("#regForm .main").css("margin-top", "-300px");
+                    if (isForPhone) {
+                        $(".am-modal-alert").css({ "top": "30%" }, { "left": "10%" });
+                        $(".am-text-right").hide();
+                    }
+                }
+            });
+        }
+        function changePassword() {
+            $.Nuoya.ajaxDialog({
+                closeViaDimmer: false,
+                width: (isForPhone ? (($(window).width() - 40) + "px") : "800px"),
+                height: (isForPhone ? (($(window).height() - 300) + "px") : "280px"),
+                ajaxUrl: "/HtmlTemplates/Admin/ChangePassword.html",
                 title: "修改密码",
                 callback: function (e) {
-                    if (id) {
-                        $("[name='OldPassword']").parents(".am-g").remove();
-                    }
+                        $(".am-modal-alert").css({ "top": "35%" }, { "left": "10%" });
+                        $(".am-text-right").hide();
                 },
+                isForPhone: isForPhone,
                 buttons: [{
                     label: "保存",
                     callback: function (e) {
+
                         var oldPassword = $("[name='OldPassword']").val();
                         var newPassword = $("[name='NewPassword']").val();
                         var cfmPassword = $("[name='ConfirmPassword']").val();
 
-                        if (!id) {
-                            if (oldPassword != "") {
-                                if (newPassword != cfmPassword) {
-                                    $.Nuoya.alert("旧密码不能为空");
-                                    return false;
-                                }
-                            }
-                        }
-                        if (newPassword != "" && cfmPassword != "") {
+                        if (oldPassword != "" && newPassword != "" && cfmPassword != "") {
                             if (newPassword != cfmPassword) {
-                                $.Nuoya.alert("确认密码不一样");
+                                $.Nuoya.alert("密码不能为空");
                                 return false;
                             }
-                        }
-                        else {
-                            $.Nuoya.alert("密码不能为空");
-                        }
+                            $.Nuoya.action("/account/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)'  }, function (data) {
+                                if (!data.ErrorDesc) {
+                                    $.Nuoya.alert("修改密码成功");
+                                    e.hide();
+                                }
+                                else
+                                    $.Nuoya.alert(data.ErrorDesc);
 
-                        $.Nuoya.action("/admin/User/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword,id: id?id:'@(LoginHelper.GetCurrentUser()?.ID)'}, function (data) {
-                            if (!data.ErrorDesc) {
-                                $.Nuoya.alert("修改密码成功");
-                                e.hide();
-                            }
-                            else {
-                                $.Nuoya.alert(data.ErrorDesc);
-                            }
-                       });
+                            });
+                        }
+                        else
+                            $.Nuoya.alert("密码不能为空");
                     }
                 }]
             });
         }
 
-        function clearCache()
-        {
-            $.ajax({
-                url: "/home/clearCache",
-                success: function () {
-                }
-            })
-        }
-
-        //获取Json的日期
-        function RenderDate(data) {
-            var da = eval('new ' + data.replace('/', '', 'g').replace('/', '', 'g'));
-            return da.getFullYear() + "-" + (da.getMonth() + 1) + "-" + da.getDate();
-        }
-        //获取Json的时间
-        function RenderTime(data) {
-            var da = eval('new ' + data.replace('/', '', 'g').replace('/', '', 'g'));
-            var days = da.getDate();
-            var hours = da.getHours();
-            var minutes = da.getMinutes();
-            var seconds = da.getSeconds();
-            return da.getFullYear() + "-" + (da.getMonth() + 1) + "-" + (days < 10 ? "0" + days : days) + " " + (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-        }
-        function CurentTime() {
-            var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
-            var day = now.getDate();
-            var hh = now.getHours();
-            var mm = now.getMinutes();
-            var clock = year + "-";
-            if (month < 10)
-                clock += "0";
-            clock += month + "-";
-            if (day < 10)
-                clock += "0";
-            clock += day + " ";
-            if (hh < 10)
-                clock += "0";
-            clock += hh + ":";
-            if (mm < 10) clock += '0';
-            clock += mm;
-            return (clock);
-        }
-        //加载是否框
-        function LoadYesOrNoSelectItem(obj, key) {
-            if (key == 0) {
-                $(obj).append("<option value='0' selected>否</option>");
-                $(obj).append("<option value='1' >是</option>");
+            function ShowLoading() {
+                $("#loadingDiv").show();
             }
-            else {
-                $(obj).append("<option value='0'>否</option>");
-                $(obj).append("<option value='1' selected>是</option>");
+            function CloseLoading() {
+                $("#loadingDiv").hide();
             }
-        }
-
-
-        //返回上一页
-        function BackUrl() {
-            history.go(-1);
-        }
-
-
-
-        function showMeetName(item) {
-            return item.Meet.Name;
-        }
-        function showTopicName(item) {
-            return item.MeetTopic!=null?item.MeetTopic.Name:"";
-        }
-
-        function showSpeakerName(item) {
-            return item.Meet.Name;
-        }
-
-        function showUserName(item) {
-            return item.User != null ? item.User.RealName :"";
-        }
-        function showMeetPlanName(item) {
-            return item.MeetPlan.Name;
-        }
-
-        function showUserHead(item)
-        {
-            return "<img src='" + item.User.HeadImgUrl + "' style='width:30px;height:40px;'/>"
-        }
-
-
-        function ShowLoading() {
-            $("#loadingDiv").show();
-        }
-        function CloseLoading() {
-            $("#loadingDiv").hide();
-        }
     </script>
 
 
 </head>
 
 <body>
+
     <header class="am-topbar am-topbar-inverse admin-header">
         <div class="am-topbar-brand">
-            <a href="/admin/home/index"><strong>平台---@ViewBag.Title</strong></a>
+            <a href="/home/index"><strong>@CustomHelper.GetValue("Website-Titlte")---@ViewBag.Title</strong></a>
         </div>
         <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
         <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
             <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
-                <li><a href="javascript:;"><span class="am-icon-user">@(LoginHelper.GetCurrentUser().Account)</span></a></li>
-
+                <li><a href="javascript:userInfo()"><span class="am-icon-user">@(LoginHelper.GetCurrentUser()?.Account)</span></a></li>
                 <li><a href="javascript:changePassword()"><span class="am-icon-download">修改密码</span></a></li>
-                <li><a href="javascript:clearCache()"><span class="am-icon-question"></span> <span>清除缓存</span></a></li>
-                <li><a href="/login/Quit" class="admin-quit"><span class="am-icon-sign-out"></span> <span>注销</span></a></li>
+                <li><a href="/account/Quit" class="admin-quit"><span class="am-icon-sign-out"></span> <span>注销</span></a></li>
             </ul>
         </div>
     </header>
@@ -197,62 +143,38 @@
                 <img src="~/Images/loading.jpg" />
             </div>
         </div>
-        <!-- sidebar start -->
-        <div class="admin-sidebar">
-            <ul class="am-list admin-sidebar-list">
-                <li class="admin-parent">
-                    <a data-am-collapse="{target: '#会议管理'}" class="am-cf">
-                        <span class="am-icon-calculator"></span> 会议管理
-                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
-                    </a>
-                    <ul class="am-list admin-sidebar-sub am-collapse am-in" id="会议管理">
-                        <li>
-                            <a data-am-collapse="{target: '#会议管理'}" class="am-cf am-collapsed" href="/Admin/Meet/Index">
-                                <span class="am-icon-user"></span> 会议管理
-                            </a>
-                        </li>
-                        <li>
-                            <a data-am-collapse="{target: '#计划管理'}" class="am-cf am-collapsed" href="/Admin/Plan/Index">
-                                <span class="am-icon-user"></span> 计划管理
-                            </a>
-                        </li>
-                        <li>
-                            <a data-am-collapse="{target: '#话题管理'}" class="am-cf am-collapsed" href="/Admin/Topic/Index">
-                                <span class="am-icon-user"></span> 话题管理
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="admin-parent">
-                    <a data-am-collapse="{target: '#设置管理'}" class="am-cf">
-                        <span class="am-icon-calculator"></span> 设置管理
-                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
-                    </a>
-                    <ul class="am-list admin-sidebar-sub am-collapse am-in" id="设置管理">
-                        <li>
-                            <a data-am-collapse="{target: '#会议厅管理'}" class="am-cf am-collapsed" href="/Admin/Room/Index">
-                                <span class="am-icon-user"></span> 会议厅管理
-                            </a>
-                        </li>
-                        <li>
-                            <a data-am-collapse="{target: '#演讲者管理'}" class="am-cf am-collapsed" href="/Admin/Speaker/Index">
-                                <span class="am-icon-user"></span> 演讲者管理
-                            </a>
-                        </li>
 
-                        @if (currentUser != null && currentUser.Type == UserType.SuperAdmin)
-                        {
+
+        <!-- sidebar start -->
+        <div class="admin-sidebar  am-offcanvas" id="admin-offcanvas">
+            <div class="am-offcanvas-bar admin-offcanvas-bar">
+                <ul class="am-list admin-sidebar-list  am-text-sm">
+                    <li><a href="/admin/user/index"><span class="am-icon-home"></span> 个人中心</a></li>
+                    <li class="admin-parent">
+                        <a data-am-collapse="{target: '#会议管理'}" class="am-cf">
+                            <span class="am-icon-calculator"></span> 会议管理
+                            <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                        </a>
+                        <ul class="am-list admin-sidebar-sub am-collapse am-in" id="会议管理">
                             <li>
-                                <a data-am-collapse="{target: '#管理者管理'}" class="am-cf am-collapsed" href="/Admin/User/Index">
-                                    <span class="am-icon-user"></span> 管理者管理
+                                <a data-am-collapse="{target: '#会议管理'}" class="am-cf am-collapsed" href="/Admin/Meet/Index">
+                                    <span class="am-icon-user"></span> 会议管理
                                 </a>
                             </li>
-                        }
-                    </ul>
-                </li>
-
-
-            </ul>
+                            <li>
+                                <a data-am-collapse="{target: '#计划管理'}" class="am-cf am-collapsed" href="/Admin/Plan/Index">
+                                    <span class="am-icon-user"></span> 计划管理
+                                </a>
+                            </li>
+                            <li>
+                                <a data-am-collapse="{target: '#话题管理'}" class="am-cf am-collapsed" href="/Admin/Topic/Index">
+                                    <span class="am-icon-user"></span> 话题管理
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
         <!-- sidebar end -->
         <!-- content start -->
@@ -264,14 +186,8 @@
         </div>
         <!-- content end -->
     </div>
+
     <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
-
-
-
-
     @RenderSection("scripts", false)
 </body>
 </html>
-
-
-

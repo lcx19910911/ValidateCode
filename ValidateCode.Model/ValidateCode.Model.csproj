@@ -61,11 +61,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEntity.cs" />
+    <Compile Include="admin_user.cs" />
+    <Compile Include="app_user.cs" />
+    <Compile Include="app_user_bill.cs" />
+    <Compile Include="base_entity.cs" />
+    <Compile Include="cat_device.cs" />
+    <Compile Include="invite_bill.cs" />
+    <Compile Include="phone.cs" />
+    <Compile Include="project.cs" />
+    <Compile Include="project_log.cs" />
+    <Compile Include="project_task.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Recharge.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="Withdrawals.cs" />
+    <Compile Include="sms_device.cs" />
+    <Compile Include="sms_inbox.cs" />
+    <Compile Include="sms_send.cs" />
+    <Compile Include="user_token.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

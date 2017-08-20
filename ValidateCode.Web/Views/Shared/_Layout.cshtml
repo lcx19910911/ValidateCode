@@ -1,4 +1,5 @@
 ﻿@{
+
 }
 <!doctype html>
 <html class="no-js fixed-layout">
@@ -11,51 +12,56 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta name="apple-mobile-web-app-title" content="Amaze UI" />
     <title>@CustomHelper.GetValue("Website-Titlte")</title>
-    <link href="~/Styles/css/amazeui.css" rel="stylesheet" />
-    <link href="~/Styles/bootstrap.css" rel="stylesheet" />
-    <link href="~/Styles/user.css" rel="stylesheet" />
+    <link href="/Styles/css/amazeui.css" rel="stylesheet" />
+    <link href="/Styles/css/amazeui.css" rel="stylesheet" />
+    <link href="/Scripts/tipso/css/tipso.min.css" rel="stylesheet" />
+    <link href="/Styles/admin.css" rel="stylesheet" />
+    <link href="/Scripts/My97DatePicker/skin/WdatePicker.css" rel="stylesheet" />
+    <link href="/Styles/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+
+
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+    <script src="/Scripts/jquery-validation/js/jquery.validate.js"></script>
+    <script src="/Scripts/jquery.form.js"></script>
+    <script src="/Scripts/amazeui.min.js"></script>
+    <script src="/Scripts/tipso/js/tipso.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.core.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.grid.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.form.js"></script>
+    <script src="/Scripts/Nuoya/nuoya.other.js"></script>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <script src="/Scripts/My97DatePicker/config.js"></script>
+    <script src="/Scripts/My97DatePicker/lang/zh-cn.js"></script>
+    <script src="/Scripts/file_upload_plug-in.js"></script>
+    <script src="/Scripts/jquery.ztree.all-3.5.min.js"></script>
+    <script src="/Scripts/ztree-select.js"></script>
     @RenderSection("linkcss", required: false)
-    <style type="text/css">
-        #footer {
-            line-height: 46px;
-            color: #8a8a8a;
-            border-top: 1px solid #dadada;
-            text-align: left;
-        }
-
-            #footer a {
-                color: #8a8a8a;
-                margin: 0px 5px;
-                outline: none;
-                text-decoration: none;
-            }
-
-        .lh20 {
-            line-height: 20px;
-            text-align: center;
-        }
-
-        img {
-            border: 0;
-        }
-
-        .tonglan {
-            width: 960px;
-            height: 145px;
-            margin: 10px 0px 10px 10px;
-        }
-
-        body {
-            background-color: #FBFBFF;
-            font-size: 12px;
-        }
-
-        .user-class {
-            padding-left: 0px;
+    <style>
+        [class*=am-icon-] {
+            display: inline-block;
+            font-style: normal;
         }
     </style>
     <script>
+        function userInfo() {
 
+            $.Nuoya.ajaxDialog({
+                closeViaDimmer: false,
+                addIframe: true,
+                width: (isForPhone ? (($(window).width() - 40) + "px") : "1200px"),
+                height: (isForPhone ? (($(window).height() - 300) + "px") : "780px"),
+                ajaxUrl: "/Account/Register?info=true&id=@(LoginHelper.GetCurrentUser().ID)",
+                title: "作者信息",
+                callback: function (e) {
+                    $(window.frames["alrtIframe"]).css("width", "90%");
+                    //iframeObj.find("#regForm .main").css("margin-top", "-300px");
+                    if (isForPhone) {
+                        $(".am-modal-alert").css({ "top": "30%" }, { "left": "10%" });
+                        $(".am-text-right").hide();
+                    }
+                }
+            });
+        }
         function changePassword() {
             $.Nuoya.ajaxDialog({
                 closeViaDimmer: false,
@@ -63,6 +69,11 @@
                 height: (isForPhone ? (($(window).height() - 300) + "px") : "280px"),
                 ajaxUrl: "/HtmlTemplates/Admin/ChangePassword.html",
                 title: "修改密码",
+                callback: function (e) {
+                        $(".am-modal-alert").css({ "top": "35%" }, { "left": "10%" });
+                        $(".am-text-right").hide();
+                },
+                isForPhone: isForPhone,
                 buttons: [{
                     label: "保存",
                     callback: function (e) {
@@ -76,7 +87,7 @@
                                 $.Nuoya.alert("密码不能为空");
                                 return false;
                             }
-                            $.Nuoya.action("/account/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)' }, function (data) {
+                            $.Nuoya.action("/account/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)'  }, function (data) {
                                 if (!data.ErrorDesc) {
                                     $.Nuoya.alert("修改密码成功");
                                     e.hide();
@@ -93,266 +104,73 @@
             });
         }
 
-
-
-        //获取Json的日期
-        function RenderDate(data) {
-            var da = eval('new ' + data.replace('/', '', 'g').replace('/', '', 'g'));
-            return da.getFullYear() + "-" + (da.getMonth() + 1) + "-" + da.getDate();
-        }
-        //获取Json的时间
-        function RenderTime(data) {
-            var da = eval('new ' + data.replace('/', '', 'g').replace('/', '', 'g'));
-            return da.getFullYear() + "-" + (da.getMonth() + 1) + "-" + da.getDate() + " " + da.getHours() + ":" + da.getSeconds() + ":" + da.getMinutes();
-        }
-
-
-
-
-        //返回上一页
-        function BackUrl() {
-            history.go(-1);
-        }
-
-
-        function ShowLoading() {
-            $("#loadingDiv").show();
-        }
-        function CloseLoading() {
-            $("#loadingDiv").hide();
-        }
+            function ShowLoading() {
+                $("#loadingDiv").show();
+            }
+            function CloseLoading() {
+                $("#loadingDiv").hide();
+            }
     </script>
 
 
 </head>
+
 <body>
-    <div class="" style="display: none; position: absolute;">
-        <div class="aui_outer">
-            <table class="aui_border">
-                <tbody>
-                    <tr>
-                        <td class="aui_nw"></td>
-                        <td class="aui_n"></td>
-                        <td class="aui_ne"></td>
-                    </tr>
-                    <tr>
-                        <td class="aui_w"></td>
-                        <td class="aui_c">
-                            <div class="aui_inner">
-                                <table class="aui_dialog">
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2" class="aui_header">
-                                                <div class="aui_titleBar">
-                                                    <div class="aui_title" style="cursor: move; display: block;"></div>
-                                                    <a class="aui_close" href="javascript:/*artDialog*/;" style="display: block;">×</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="aui_icon" style="display: none;">
-                                                <div class="aui_iconBg" style="background: none;"></div>
-                                            </td>
-                                            <td class="aui_main" style="width: auto; height: auto;">
-                                                <div class="aui_content" style="padding: 20px 25px;"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" class="aui_footer">
-                                                <div class="aui_buttons" style="display: none;"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                        <td class="aui_e"></td>
-                    </tr>
-                    <tr><td class="aui_sw"></td><td class="aui_s"></td><td class="aui_se" style="cursor: se-resize;"></td></tr>
-                </tbody>
-            </table>
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <div class="am-topbar-brand">
+            <a href="/home/index"><strong>@CustomHelper.GetValue("Website-Titlte")---@ViewBag.Title</strong></a>
         </div>
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+                <li><a href="javascript:userInfo()"><span class="am-icon-user">@(LoginHelper.GetCurrentUser()?.Account)</span></a></li>
+                <li><a href="javascript:changePassword()"><span class="am-icon-download">修改密码</span></a></li>
+                <li><a href="/account/Quit" class="admin-quit"><span class="am-icon-sign-out"></span> <span>注销</span></a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="am-cf admin-main am-text-left" style="padding-top:0px;">
+
+        <div id="imgDiv" style="opacity:1;background-color:black;width:100%;height:100%;z-index:9000; display:none; position:absolute;">
+            <div style="width:500px; margin:0 auto; z-index:9001;margin-top:10%">
+                <img src="" style="width:100%;" />
+            </div>
+        </div>
+
+        <div id="loadingDiv" style="opacity:0.7;background-color:black;width:100%;height:100%;z-index:9000; display:none; position:absolute;">
+            <div style="width:500px; margin:0 auto; z-index:9001;margin-top:20%">
+                <img src="~/Images/loading.jpg" />
+            </div>
+        </div>
+
+
+        <!-- sidebar start -->
+        <div class="admin-sidebar  am-offcanvas" id="admin-offcanvas">
+            <div class="am-offcanvas-bar admin-offcanvas-bar">
+                <ul class="am-list admin-sidebar-list  am-text-sm">
+                    <li><a href="/user/index"><span class="am-icon-home"></span> 个人中心</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 获取验证码</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 项目列表</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 短信记录</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 充值记录</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 下线提成</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 提现记录</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 修改资料</a></li>                 
+                </ul>
+            </div>
+        </div>
+        <!-- sidebar end -->
+        <!-- content start -->
+        <div class="admin-content">
+            <div>
+                @RenderBody()
+            </div>
+
+        </div>
+        <!-- content end -->
     </div>
-    <div class="container">
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="http://www.xunma.net/help.html" target="_blank">讯码平台接码操作说明请点击访问：www.xunma.net/help.html</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav"> </ul>
-                    <ul class="nav navbar-nav pull-right">
-                        <li class="dropdown">
-                            <a href="http://www.xunma.net/userManage/UserInfo.aspx#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span>会员中心<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.xunma.net/">返回首页</a></li>
-                                <li><a href="http://www.xunma.net/UserManage/userExit.aspx">退出</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>    <div class="container">
-            <div class="container">
-                <div class="row">
-                    <div class="masthead" style="margin-top:30px">
-                        <p class="text-warning">创造无尽财富，不一样的感觉！&nbsp;&nbsp;唯一客服QQ：1219665767&nbsp;&nbsp;官方QQ群：375101321</p><div class="row">
-                            <div class="masthead" style="margin-top:0px">
-                                <p class="text-warning">
-                                </p>
-                                <ul class="nav nav-justified">
-                                    <li><a href="http://www.xunma.net/userManage/Index.aspx">个人信息</a></li>
 
-                                    <li><a href="http://www.xunma.net/userManage/GetCode.aspx">获取验证码</a></li>
-
-                                    <li><a href="http://www.xunma.net/userManage/Category.aspx">项目列表</a></li>
-                                    <li><a href="http://www.xunma.net/userManage/Message.aspx">短信记录</a></li>
-                                    <li><a href="http://www.xunma.net/userManage/Money.aspx">充值记录</a></li>
-                                    <li><a href="http://www.xunma.net/userManage/UserDraw.aspx">下线提成</a></li>
-                                    <li><a href="http://www.xunma.net/userManage/WithDraw.aspx">提现记录</a></li>
-                                    <li><a href="http://www.xunma.net/userManage/UserInfo.aspx">修改资料</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <br><div style="width:100%">
-                            <div class="row">
-                                <p class="text-warning">
-                                    <a href="http://www.xunma.net/download/User.exe" class="btn btn-primary btn-lg">电脑用户端软件下载</a>&nbsp;&nbsp;&nbsp;批量高效接收，体验更便捷！　
-                                    <a data-target="#pay" data-toggle="modal" cursor:pointer;'="" class="btn btn-primary btn-lg">点击充值</a>
-                                    赶快推广下线，领取消费提成奖励哦！！！高达消费的10%
-                                </p>
-                                <script src="./个人中心_files/jquery.validate.min.js.下载"></script>
-                                <script src="./个人中心_files/messages_zh.js.下载"></script>
-                                <div style="margin-top:10px;width:100%">
-                                    <div class="row">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">修改个人资料</div>
-                                            <div class="panel-body">
-                                                <div class="row  col-md-offset-3 col-md-6">
-                                                    <fieldset>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">当前密码</label>
-                                                            <div class="col-md-6">
-                                                                <input type="password" id="userPassword" class="form-control" placeholder="当前密码" required="">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3">新密码</label>
-                                                            <div class="col-md-6">
-                                                                <input type="password" id="newPassword" class="form-control" placeholder="新密码" required="">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">重复新密码</label>
-                                                            <div class="col-md-6">
-                                                                <input type="password" id="repeatNewPassword" class="form-control" placeholder="重复新密码" required="">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">真实姓名</label>
-                                                            <div class="col-md-6">
-                                                                <input type="text" id="trueName" class="form-control" value="李桂滨" placeholder="真实姓名">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">支付宝</label>
-                                                            <div class="col-md-6">
-                                                                <input type="text" id="alipayUser" class="form-control" value="13960988626" placeholder="支付宝">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">联系电话</label>
-                                                            <div class="col-md-6">
-                                                                <input type="text" id="Phone" class="form-control" value="13960988626" placeholder="联系电话">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">QQ</label>
-                                                            <div class="col-md-6">
-                                                                <input type="text" id="userQQ" class="form-control" value="424099029" placeholder="QQ">
-                                                            </div>
-                                                        </div><br><br>
-                                                        <div class="form-group">
-                                                            <label class="col-md-3">邮箱</label>
-                                                            <div class="col-md-6">
-                                                                <input type="text" id="userEmail" class="form-control" value="424099029@qq.com" placeholder="邮箱">
-                                                            </div>
-                                                        </div><br><br>
-                                                    </fieldset><br>
-                                                    <button type="button" onclick="modUser()" class="btn btn-success">确认保存</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    function modUser() {
-                                        var userPassword = $("#userPassword").val();
-                                        var newPassword = $("#newPassword").val();
-                                        var repeatNewPassword = $("#repeatNewPassword").val();
-                                        var trueName = $("#trueName").val();
-                                        var Phone = $("#Phone").val();
-                                        var userQQ = $("#userQQ").val();
-                                        var userEmail = $("#userEmail").val();
-                                        var alipayUser = $("#alipayUser").val();
-
-                                        $.post('action.aspx', { type: 'modUser', alipayUser: alipayUser, userPassword: userPassword, newPassword: newPassword, repeatNewPassword: repeatNewPassword, trueName: trueName, Phone: Phone, userQQ: userQQ, userEmail: userEmail },
-                                            function (data) {
-                                                alert(data);
-                                            });
-                                    }
-                                </script>
-                            </div>
-                            <div class="modal fade" id="pay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <form name="alipayment" id="alipayment" action="http://www.xunma.net/aliPay/Default.aspx" method="get" target="_blank">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                <h4 class="modal-title" id="H2">在线充值</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="alert alert-danger">
-                                                    <div class="form-group">
-                                                        <label>
-                                                            <input type="radio" class="selType" name="optionsRadios" id="Radio1" value="2" checked="">
-                                                            充值金额（单笔充值满100元送10%，上不封顶！）
-                                                        </label>
-                                                        <input type="hidden" name="ln" value="sms001">
-                                                        <input type="text" class="form-control" name="pay" style="width:60%" placeholder="如:100">
-                                                    </div>
-                                                </div>
-                                                <input name="btnCheck" type="button" value="确定充值" class="btn btn-danger" onclick="CheckForm1();" data-bind="click: Topup">
-                                                <div class="panel panel-info">
-                                                    <div class="panel-body">
-                                                        <div class="alert alert-danger">
-                                                            <h6>最低充值金额1元,充值立即到账.有问题请联系客服QQ：1219665767</h6>
-                                                            <h6>1.请用多少充多少, 充值金额不可提现，只可在本站消费。</h6>
-                                                            <h6>2.用户积分计算方式为充值总额。一元为1分，积分只会增加不会减少。</h6>
-                                                        </div>
-                                                        <h4>第一步：输入金额，点确认充值。</h4>
-                                                        <h4>第二步：充值成功后立即到账，可<a href="http://www.xunma.net/userManage/Money.aspx">充值记录</a>页面查看</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <script>
-                                    $(function () {
-                                        $(".panel-body").find("p").eq(5).find('a').attr('data-target', '#pay');
-                                    })
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><div style="display: none; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; cursor: move; opacity: 0; background: rgb(255, 255, 255);"></div>
+    <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+    @RenderSection("scripts", false)
 </body>
-@RenderBody()
-@RenderSection("scripts", false)
 </html>

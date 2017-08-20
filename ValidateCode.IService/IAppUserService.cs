@@ -10,10 +10,8 @@ using ValidateCode.Model;
 
 namespace ValidateCode.IService
 {
-    public interface IRechargeService : IBaseService<Recharge>
+    public interface IAppUserService : IBaseService<app_user>
     {
-
-        //                充值
         /// <summary>
         /// 获取分页列表
         /// </summary>
@@ -21,7 +19,12 @@ namespace ValidateCode.IService
         /// <param name="pageSize">分页大小</param>
         /// <param name="title">标题 - 搜索项</param>
         /// <returns></returns>
-        PageList<Recharge> GetPageList(int pageIndex, int pageSize, string userId, DateTime? createdTimeStart, DateTime? createdTimeEnd);
+        PageList<app_user> GetPageList(int pageIndex, int pageSize, string account,string phone,string code);
+
+        WebResult<app_user> Login(string account, string password,string code);
+
+        WebResult<bool> Manager(app_user model,string code,bool isAdmin);
+        WebResult<bool> ChangePassword(string oldPassword, string newPassword, string cfmPassword, int id);
 
     }
 }

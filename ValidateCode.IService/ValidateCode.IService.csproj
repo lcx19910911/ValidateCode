@@ -61,10 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAdminUserService.cs" />
     <Compile Include="IBaseService.cs" />
-    <Compile Include="IRechargeService.cs" />
-    <Compile Include="IUserService.cs" />
-    <Compile Include="IWithdrawalsService.cs" />
+    <Compile Include="IAppUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

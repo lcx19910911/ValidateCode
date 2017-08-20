@@ -1,17 +1,21 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "管理员管理";
+    ViewBag.Title = "用户管理";
 }
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><a href="/admin/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>管理员管理</small></div>
+    <div class="am-fl am-cf"><a href="/admin/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>用户管理</small></div>
 </div>
 <div id="searchDomain">
 
     <div class="am-g">
-        <div class="am-u-lg-3">
+        <div class="am-u-lg-9">
             <div class="am-input-group am-input-group-sm">
                 <span class="am-input-group-label">名称：</span>
-                <input type="text" class="am-form-field" placeholder="按管理员名称搜索" style="width:100px;" name="name" ;>
+                <input type="text" class="am-form-field" placeholder="按用户名称搜索" style="width:100px;" name="name" ;>
+                <span class="am-input-group-label  am-margin-left-sm">手机：</span>
+                <input type="text" class="am-form-field" placeholder="按手机号码搜索" style="width:100px;" name="phone" ;>
+                <span class="am-input-group-label  am-margin-left-sm">推广码：</span>
+                <input type="text" class="am-form-field" placeholder="按推广码搜索" style="width:100px;" name="code" ;>
 
                 <span class="am-input-group-btn am-margin-left-sm">
                     <button class="am-btn am-btn-default" id="btnSearch" type="button">搜索</button>
@@ -26,7 +30,6 @@
         <div class="am-u-lg-6">
             <div class="am-btn-toolbar">
                 <div class="am-btn-group am-btn-group-xs">
-                    <button onclick="add()" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
                     <button onclick="batchDelete()" type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
                 </div>
             </div>
@@ -40,9 +43,18 @@
         <thead>
             <tr>
                 <th dataname="ID" type="checkbox"></th>
-                <th dataname="RealName">名称</th>
-                <th dataname="Account">账号</th>
-                <th dataname="MobilePhone">手机号</th>
+                <th dataname="username">名称</th>
+                <th dataname="qq">qq</th>
+                <th dataname="email">email</th>
+                <th dataname="funds">余额</th>
+                <th dataname="phone">手机号</th>
+                <th dataname="vip_level">Vip等级</th>
+                <th dataname="invite_code">邀请码</th>
+                <th dataname="invite_user_name">上级</th>
+                <th dataname="invite_profit">推广收益</th>
+                <th dataname="invite_offer">贡献上级</th>
+                <th dataname="reg_time" datatype="jsondate">创建日期</th>
+                <th dataname="login_time" datatype="jsondate">登录日期</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -71,71 +83,52 @@
             //添加表单验证
             $.Nuoya.form("form").validate({
                 rules: {
-                    RealName: {
-                        required: true,
-                        maxlength: 100
+                    email: {
+                        maxlength: 126,
+                        email: true,
                     },
-                    Account: {
-                        required: true,
-                        maxlength: 12
+                    qq: {
+                        maxlength: 32
                     },
-                    Password: {
-                        required: true,
-                        maxlength: 12
+                    phone: {
+                        mobile: true,
                     },
-                    MobilePhone: {
+                    alipay_name: {
                         required: true,
-                        maxlength: 11
+                        maxlength: 32
+                    },
+                    alipay_acc: {
+                        required: true,
+                        maxlength: 32
+                    },
+                    code: {
+                        required: true
                     }
                 },
                 messages: {
-                    RealName: {
-                        required: "不允许为空",
+                    email: {
+                        maxlength: "最多{0}个字符",
+                    },
+                    qq: {
                         maxlength: "最多{0}个字符"
                     },
-                    Account: {
-                        required: "不允许为空",
+                    phone: {
+                    },
+                    alipay_name: {
+                        required: "支付宝姓名不允许为空",
                         maxlength: "最多{0}个字符"
                     },
-                    Password: {
-                        required: "不允许为空",
+                    alipay_acc: {
+                        required: "支付宝账号不允许为空",
                         maxlength: "最多{0}个字符"
                     },
-                    MobilePhone: {
-                        required: "不允许为空",
-                        maxlength: "最多{0}个字符"
-                    }
+                    code: {
+                        required: "验证码不允许为空",
+                    },
                 }
             });
         }
 
-        //新增
-        function add() {
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                ajaxUrl: "/Areas/Admin/HtmlTemplates/User/Update.html",
-                title: "添加管理员",
-                callback: function (e) {
-                    formInit();//表单初始化
-                },
-                buttons: [{
-                    label: "保存",
-                    callback: function (e) {
-                        $.Nuoya.form("form").ajaxSubmit({
-                            ajaxUrl: "/Admin/User/Add",
-                            callback: function (data) {
-                                if (!data.ErrorDesc) {
-                                    e.hide();
-                                    grid.reload();
-                                }
-                                else
-                                    $.Nuoya.alert(data.ErrorDesc);
-                            }
-                        });
-                    }
-                }]
-            })
-        }
 
         var grid = $.Nuoya.grid({
             tableId: "dataTable",
@@ -145,11 +138,7 @@
                 subId: "btnSearch"
             },
             ajaxUrl: "/Admin/User/GetPageList",
-            params: {
-                IsAdmin: true
-            },
             //数据请求地址
-
             events: [
 
                 {
@@ -160,16 +149,15 @@
                         $.Nuoya.ajaxDialog({
                             closeViaDimmer: false,
                             ajaxUrl: "/Areas/Admin/HtmlTemplates/User/Update.html",
-                            title: "编辑管理员",
+                            title: "编辑用户",
                             callback: function (e) {
-                                $("#passwordDiv").remove();
                                 $.Nuoya.action("/Admin/User/Find", { id: item.ID }, function (model) {
                                     formInit(model);//表单初始化
                                     //载入数据
                                     $.Nuoya.form("form").dataLoad({
                                         data: model
                                     });
-                                    $("[name='Account']").prop("readonly", true);
+                                    $("[name='username']").prop("readonly", true);
                                 });
                             },
                             buttons: [{

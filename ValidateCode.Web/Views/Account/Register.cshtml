@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model app_user
 @{
     Layout = null;
 }
@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@CustomHelper.GetValue("Website-Titlte") -注册 </title>
+    <title>@CustomHelper.GetValue("Website-Titlte") -@(Model.id==0 ? "注册" : "编辑") </title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,60 +25,69 @@
     </style>
 </head>
 <body>
-    <div class="main" >
-        <div class="header" >
-            <h1>新用户注册</h1>
-
+    <div class="main" style="">
+        <div class="header" style="">
+            <h1>@(Model.id == 0 ? "新用户注册" : "编辑用户信息")</h1>
+            @if (Model.id == 0)
+            {
                 <p class="registered">已有账号?<a href="/account/login">立即登录</a></p>
+            }
         </div>
         <form id="regForm">
             <ul class="dataform">
                 <li>
-                    <lable class="info">账号:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入账号" required id="account" name="Account"/>
+                    <lable class="info">账号:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入账号" required id="username" name="username" value="@(Model.username)" @(Model.id != 0 ? "readonly" : "") />
                     <div class="clear"> </div>
                 </li>
-
+                <input name="id" type="hidden" value="@(Model.id)" />
+                @if (Model.id == 0)
+                {
                     <li>
-                        <lable class="info">密码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="password" placeholder="请输入密码" required id="password" name="NewPassword" maxlength="12" />
+                        <lable class="info">密码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="password" placeholder="请输入密码" required name="new_password" maxlength="12" />
                         <div class="clear"> </div>
                     </li>
                     <li>
-                        <lable class="info">确认密码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="password" placeholder="确认密码" required id="password" name="ConfirmPassword" maxlength="12" />
+                        <lable class="info">确认密码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="password" placeholder="确认密码" required name="confirm_password" maxlength="12" />
                         <div class="clear"> </div>
                     </li>
+                }
                 <li>
-                    <lable class="info">邮箱:</lable><input type="text" placeholder="请输入邮箱" name="Email" maxlength="32"  />
+                    <lable class="info">邮箱:</lable><input type="text" placeholder="请输入邮箱" name="email" maxlength="32" value="@(Model.email)" />
                     <div class="clear"> </div>
                 </li>
                 <li>
-                    <lable class="info">手机:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入手机" required name="MobilePhone" maxlength="11"/>
+                    <lable class="info">手机:</lable><input type="text" placeholder="请输入手机"  name="phone" maxlength="11" value="@(Model.phone)" />
                     <div class="clear"> </div>
                 </li>
                 <li>
-                    <lable class="info">QQ:</lable><input type="text" placeholder="请输入QQ" name="QQ" maxlength="32" />
+                    <lable class="info">QQ:</lable><input type="text" placeholder="请输入QQ" name="qq" maxlength="32" value="@(Model.qq)" />
                     <div class="clear"> </div>
                 </li>
                 <li>
-                    <lable class="info">支付宝姓名:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入支付宝姓名" required name="AliPayName" maxlength="32" />
+                    <lable class="info">支付宝姓名:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入支付宝姓名" required name="alipay_name" maxlength="32" value="@(Model.alipay_name)" />
                     <div class="clear"> </div>
                 </li>
                 <li>
-                    <lable class="info">支付宝账号:</lable><input type="text" placeholder="请输入支付宝账号" name="AliPayAccount" maxlength="32"  />
+                    <lable class="info">支付宝账号:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入支付宝账号" name="alipay_acc" maxlength="32" value="@(Model.alipay_acc)" />
                     <div class="clear"> </div>
                 </li>
-                        <li>
-                            <lable class="info">验证码:<strong class="am-text-danger am-text-sm">*</strong></lable>
-                            <div style="width:70%;float:left;">
-                                <input type="text" style="width:56%;" placeholder="请输入验证码" required name="ValiteCode" />
-                                <img id="img_code" style="width:30%;height:2rem;float:left;" alt="" title="点击重新获取" src="/account/validatecode" onclick="javascript:$(this).attr('src','/account/validatecode?r='+Math.random());" />
-                            </div>
-                            <div class="clear"> </div>
-                        </li>
-
-                        <label><input type="checkbox" id="checkbox" checked=""><i> </i>同意平台条款</label>
-                        <button class="submit-btn" onclick="Submit()">注册</button>
-
+                <li>
+                    <lable class="info">验证码:<strong class="am-text-danger am-text-sm">*</strong></lable>
+                    <div style="width:70%;float:left;">
+                        <input type="text" style="width:56%;" placeholder="请输入验证码" required name="code" />
+                        <img id="img_code" style="width:30%;height:2rem;float:left;" alt="" title="点击重新获取" src="/account/validatecode" onclick="javascript:$(this).attr('src','/account/validatecode?r='+Math.random());" />
+                    </div>
                     <div class="clear"> </div>
+                </li>
+                @if (Model.id != 0)
+                {
+                    <button class="submit-btn" onclick="Save()" style="height:50px;margin-left:10%;">保存</button>
+                }
+                else
+                {
+                    <button class="submit-btn" onclick="Submit()">注册</button>
+                }
+                <div class="clear"> </div>
             </ul>
             <div class="clear"> </div>
 
@@ -94,82 +103,129 @@
     <script type="text/javascript">
 
         function formInit(dataitem) {
-
+            var isAdd = "@(Model.id)" == "0";
+            if (isAdd) {
                 //添加表单验证
                 $.Nuoya.form("regForm").validate({
                     rules: {
-                        Account: {
-                            required: true,
-                            maxlength: 32
-                        },
-                        NewPassword: {
+                        username: {
                             required: true,
                             maxlength: 12
                         },
-                        ConfirmPassword: {
+                        new_password: {
                             required: true,
                             maxlength: 12
                         },
-                        Email: {
+                        confirm_password: {
+                            required: true,
+                            maxlength: 12
+                        },
+                        email: {
                             maxlength: 126,
                             email: true,
                         },
-                        QQ: {
+                        qq: {
+                            maxlength: 32
+                        },
+                        phone: {
+                            mobile: true,
+                        },
+                        alipay_name: {
                             required: true,
                             maxlength: 32
                         },
-                        MobilePhone: {
-                            required: true,
-                            mobile: true,
-                        },
-                        AliPayName: {
+                        alipay_acc: {
                             required: true,
                             maxlength: 32
                         },
-                        AliPayAccount: {
-                            required: true,
-                            mobile: true,
-                        },
-                        Code: {
+                        code: {
                             required: true
                         }
                     },
                     messages: {
-                        Account: {
+                        username: {
                             required: "用户名不允许为空",
                             maxlength: "最多{0}个字符"
                         },
-                        NewPassword: {
+                        new_password: {
                             required: "密码不允许为空",
                             maxlength: "最多{0}个字符"
                         },
-                        ConfirmPassword: {
+                        confirm_password: {
                             required: "确认密码不允许为空",
                             maxlength: "最多{0}个字符"
                         },
-                        Email: {
+                        email: {
                             maxlength: "最多{0}个字符",
                         },
-                        QQ: {
-                            required: "QQ不允许为空",
+                        qq: {
                             maxlength: "最多{0}个字符"
                         },
-                        MobilePhone: {
-                            required: "手机不允许为空",
+                        phone: {
                         },
-                        AliPayName: {
+                        alipay_name: {
                             required: "支付宝姓名不允许为空",
                             maxlength: "最多{0}个字符"
                         },
-                        AliPayAccount: {
+                        alipay_acc: {
                             required: "支付宝账号不允许为空",
                             maxlength: "最多{0}个字符"
-                        },                     
-                        Code: {
+                        },
+                        code: {
                             required: "验证码不允许为空",
                         },
                     }
                 });
+            }
+            else {
+                //添加表单验证
+                $.Nuoya.form("regForm").validate({
+                    rules: {
+                        email: {
+                            maxlength: 126,
+                            email: true,
+                        },
+                        qq: {
+                            maxlength: 32
+                        },
+                        phone: {
+                            mobile: true,
+                        },
+                        alipay_name: {
+                            required: true,
+                            maxlength: 32
+                        },
+                        alipay_acc: {
+                            required: true,
+                            maxlength: 32
+                        },
+                        code: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        email: {
+                            maxlength: "最多{0}个字符",
+                        },
+                        qq: {
+                            maxlength: "最多{0}个字符"
+                        },
+                        phone: {
+                        },
+                        alipay_name: {
+                            required: "支付宝姓名不允许为空",
+                            maxlength: "最多{0}个字符"
+                        },
+                        alipay_acc: {
+                            required: "支付宝账号不允许为空",
+                            maxlength: "最多{0}个字符"
+                        },
+                        code: {
+                            required: "验证码不允许为空",
+                        },
+                    }
+                });
+            }
         }
         formInit();
         function Submit() {
@@ -186,6 +242,22 @@
                     }
                 });
 
+        }
+
+        function Save() {
+            $.Nuoya.form("regForm").ajaxSubmit({
+                ajaxUrl: "/Account/Save",
+                callback: function (data) {
+                    if (!data.ErrorDesc) {
+                        alert("修改成功");
+                        window.location.href = "/home/index";
+                    }
+                    else {
+                        alert(data.ErrorDesc);
+                    }
+                    return;
+                }
+            });
         }
     </script>
 

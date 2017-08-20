@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using ValidateCode.Core.Util;
 using ValidateCode.DB;
+using ValidateCode.Model;
 
 namespace ValidateCode.Web
 {
@@ -28,20 +29,18 @@ namespace ValidateCode.Web
             ///预加载
             using (var dbcontext = new DbRepository())
             {
-                //dbcontext.Database.CreateIfNotExists();
+                dbcontext.Database.CreateIfNotExists();
                 var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
                 var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
                 mappingCollection.GenerateViews(new List<EdmSchemaError>());
-                if (!dbcontext.User.Where(x => x.Type==Model.UserType.Admin).Any())
+                if (!dbcontext.admin_user.Where(x => x.type== Model.AdminType.super).Any())
                 {
-                    dbcontext.User.Add(new Model.User()
+                    dbcontext.admin_user.Add(new admin_user()
                     {
-                        CreatedTime = DateTime.Now,
-                        Account = "admin",
-                        Type = Model.UserType.Admin,
-                        Password = CryptoHelper.MD5_Encrypt("123456"),
-                        AliPayName= "admin",
-                        AliPayAccount="admin"
+                        created_time = DateTime.Now,
+                        account = "admin",
+                        type = Model.AdminType.super,
+                        password = CryptoHelper.MD5_Encrypt("123456")
                     });
                     dbcontext.SaveChanges();
                 }

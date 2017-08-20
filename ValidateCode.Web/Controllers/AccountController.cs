@@ -20,11 +20,13 @@ namespace ValidateCode.Web.Controllers
     public class AccountController : BaseController
     {
 
-        public IUserService IUserService;
+        public IAppUserService IUserService;
 
-        public AccountController(IUserService _IUserService)
+        public IAdminUserService IAdminUserService;
+        public AccountController(IAppUserService _IUserService, IAdminUserService _IAdminUserService)
         {
             this.IUserService = _IUserService;
+            this.IAdminUserService = _IAdminUserService;
         }
 
         
@@ -33,24 +35,67 @@ namespace ValidateCode.Web.Controllers
         {
             return View();
         }
-
-        public ActionResult Register()
+        // GET: Login
+        public ActionResult AdminLogin()
         {
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Register(User model)
-        {
 
-            ModelState.Remove("ID");
-            ModelState.Remove("CreatedTime");
-            ModelState.Remove("IsDelete");
-            ModelState.Remove("Password");
-            ModelState.Remove("Type");
+        public ActionResult Register(int id=0)
+        {
+            var model = IUserService.Find(id);
+            if (model == null)
+                return View(new app_user());
+            else
+                return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Register(app_user model,string code)
+        {
+            ModelState.Remove("id");
+            ModelState.Remove("reg_time");
+            ModelState.Remove("pasword");
             if (ModelState.IsValid)
             {
-                var result = IUserService.Manager(model);
+                var result = IUserService.Manager(model, code,false);
+                return JResult(result);
+            }
+            else
+            {
+                return ParamsErrorJResult(ModelState);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Save(app_user model, string code)
+        {
+            
+            ModelState.Remove("reg_time");
+            ModelState.Remove("pasword");
+            if (ModelState.IsValid)
+            {
+                var result = IUserService.Manager(model, code, false);
+                return JResult(result);
+            }
+            else
+            {
+                return ParamsErrorJResult(ModelState);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult CreateAdmin(admin_user model)
+        {
+
+            ModelState.Remove("id");
+            ModelState.Remove("created_time");
+            if (ModelState.IsValid)
+            {
+                var result = IAdminUserService.Manager(model);
                 return JResult(result);
             }
             else
@@ -60,9 +105,9 @@ namespace ValidateCode.Web.Controllers
         }
 
         #region 验证码
-            /// <summary>
-            /// 验证码
-            /// </summary>
+        /// <summary>
+        /// 验证码
+        /// </summary>
         public void ValidateCode()
         {
             ValidateCodeGenertor v = ValidateCodeGenertor.Default;
@@ -88,7 +133,25 @@ namespace ValidateCode.Web.Controllers
             var result = IUserService.Login(account, password,code);
             if (result.Success)
             {
-                LoginHelper.CreateUser(result.Result);
+                LoginHelper.CreateUser(new LoginUser(result.Result.id,result.Result.username,false));
+            }
+            return JResult(result);
+
+        }
+
+
+        /// <summary>
+        /// 登录提交
+        /// </summary>
+        /// <param name="account">账号</param>
+        /// <param name="password">密码</param> 
+        /// <returns></returns>
+        public JsonResult AdminSubmit(string account, string password, string code)
+        {
+            var result = IAdminUserService.Login(account, password, code);
+            if (result.Success)
+            {
+                LoginHelper.CreateUser(new LoginUser(result.Result.id, result.Result.account, true));
             }
             return JResult(result);
 

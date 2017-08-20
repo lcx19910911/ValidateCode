@@ -41,9 +41,9 @@ namespace ValidateCode.Core.Model
         /// </summary>
         public LogCode LogCode { get; set; } = LogCode.None;
 
-        private User _loginUser = null;
+        private LoginUser _loginUser = null;
 
-        public User LoginUser
+        public LoginUser LoginUser
         {
             get
             {
