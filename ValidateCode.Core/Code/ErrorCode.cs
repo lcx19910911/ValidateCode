@@ -124,7 +124,7 @@ namespace ValidateCode.Core.Code
 
         /// </summary>
         [Description("已审核")]
-        join_had_audit = 208,
+        had_audit = 208,
 
 
         /// </summary>

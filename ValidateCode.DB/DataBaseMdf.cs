@@ -25,6 +25,9 @@ namespace ValidateCode.DB
         public virtual DbSet<sms_inbox> sms_inbox { get; set; }
         public virtual DbSet<sms_send> sms_send { get; set; }
         public virtual DbSet<user_token> user_token { get; set; }
+        public virtual DbSet<withdrawals> withdrawals { get; set; }
+        public virtual DbSet<recharge> recharge { get; set; }
+        
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

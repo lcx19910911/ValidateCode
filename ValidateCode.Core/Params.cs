@@ -26,5 +26,15 @@ namespace ValidateCode.Core
         /// 登陆cookie
         /// </summary>
         public static readonly string UserCookieName = "website_user";
+
+        /// <summary>
+        /// 已收短信表(statu)  只对用户显示该值的短信
+        /// </summary>
+        public const int ShowSendSmsStatus = 2000;
+
+        /// <summary>
+        /// 已发短信表sms_send  的statu  只对用户显示该值的短信
+        /// </summary>
+        public const int ShowReviceSmsStatus = 1900;
     }
 }

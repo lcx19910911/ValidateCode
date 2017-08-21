@@ -63,9 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminUserService.cs" />
+    <Compile Include="ProjectService.cs" />
+    <Compile Include="AppUserService.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AppUserService.cs" />
+    <Compile Include="RechargeService.cs" />
+    <Compile Include="WithdrawalsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

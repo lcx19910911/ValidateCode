@@ -174,7 +174,8 @@
     <Content Include="Areas\Admin\HtmlTemplates\Meet\Report.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Meet\SelectFile.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Meet\Update.html" />
-    <Content Include="Areas\Admin\HtmlTemplates\Plan\Update.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Project\Add.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Project\Update.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Room\Update.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Speaker\Index.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Speaker\Update.html" />
@@ -282,10 +283,12 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProjectController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -319,14 +322,14 @@
     <Content Include="Areas\Admin\Views\Plan\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Room\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Speaker\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\TopicUserJoin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Project\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Topic\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\UserJoin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Views\Base\_404.cshtml" />
     <Content Include="Views\Base\_500.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Views\Account\AdminLogin.cshtml" />
+    <Content Include="Views\Project\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -42,7 +42,7 @@
     <table id="dataTable" class="am-table am-table-compact am-table-hover table-main">
         <thead>
             <tr>
-                <th dataname="ID" type="checkbox"></th>
+                <th dataname="id" type="checkbox"></th>
                 <th dataname="username">名称</th>
                 <th dataname="qq">qq</th>
                 <th dataname="email">email</th>
@@ -151,7 +151,7 @@
                             ajaxUrl: "/Areas/Admin/HtmlTemplates/User/Update.html",
                             title: "编辑用户",
                             callback: function (e) {
-                                $.Nuoya.action("/Admin/User/Find", { id: item.ID }, function (model) {
+                                $.Nuoya.action("/Admin/User/Find", { id: item.id }, function (model) {
                                     formInit(model);//表单初始化
                                     //载入数据
                                     $.Nuoya.form("form").dataLoad({
@@ -167,7 +167,7 @@
                                     $.Nuoya.form("form").ajaxSubmit({
                                         ajaxUrl: "/Admin/User/Update",
                                         params: {
-                                            ID: item.ID
+                                            id: item.id
                                         },
                                         callback: function (data) {
                                             if (!data.ErrorDesc) {
@@ -189,7 +189,7 @@
                 icon: "icon-hand-rock-o",
                 name: "重置密码",
                 click: function (item) {
-                    changePassword(item.ID);
+                    changePassword(item.id);
                 }
             }
                 ,
@@ -200,7 +200,7 @@
                     click: function (item) {
                         $.Nuoya.confirm("确认删除？", function () {
                             $.Nuoya.deleteAction("/Admin/User/Delete", {
-                                ids: item.ID
+                                ids: item.id
                             },
                             function () {
                                 grid.reload();

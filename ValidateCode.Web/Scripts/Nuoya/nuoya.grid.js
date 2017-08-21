@@ -299,8 +299,6 @@
             $.Nuoya.action(options.ajaxUrl, _getParams(), function (json) {
                 json.List = json.List == null ? [] : json.List;
                 $.Nuoya.callFunction(options.callback, json);
-                userOperateUrlArray = json.OperateList;
-                operateUrlArray = json.OperateList;
                 _createContent(json.List);//创建内容
                 _createPaginate(json);//创建页码
                 $.Nuoya.callFunction(options.drawCallback, json);
@@ -313,7 +311,7 @@
         //获取选中节点对象
         var _getCheckNote = function (fieldName) {
             debugger
-            fieldName = $.isEmptyObject(fieldName) ? "ID" : fieldName;
+            fieldName = $.isEmptyObject(fieldName) ? "id" : fieldName;
             return tableObj.find("tr td[fieldname='" + fieldName + "'] input:checked");
         }
 

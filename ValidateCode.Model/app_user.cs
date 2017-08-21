@@ -1,5 +1,6 @@
 namespace ValidateCode.Model
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -25,9 +26,6 @@ namespace ValidateCode.Model
 
         [StringLength(32)]
         public string email { get; set; }
-
-        [Column(TypeName = "numeric")]
-        public decimal? funds { get; set; }
 
         public DateTime reg_time { get; set; }
 
@@ -81,5 +79,28 @@ namespace ValidateCode.Model
         [MaxLength(12), MinLength(6), Compare("new_password", ErrorMessage = "两次密码输入不一致")]
         [NotMapped]
         public string confirm_password { get; set; }
+
+        /// <summary>
+        /// 充值总额
+        /// </summary>
+        [Display(Name = "充值总额")]
+        [Column(TypeName = "numeric")]
+        public decimal? total_recharge { get; set; }
+        [JsonIgnore]
+        public virtual List<recharge> UserRecharges { get; set; }
+
+        /// <summary>
+        /// 提现总额
+        /// </summary>
+        [Display(Name = "提现总额")]
+        [Column(TypeName = "numeric")]
+        public decimal? total_withdrawals { get; set; }
+        [JsonIgnore]
+        public virtual List<withdrawals> UserWithdrawals { get; set; }
+
+
+
+        [Column(TypeName = "numeric")]
+        public decimal? funds { get; set; }
     }
 }

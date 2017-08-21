@@ -1,0 +1,219 @@
+﻿@{
+    ViewBag.Title = "项目管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>项目管理</small></div>
+</div>
+<div id="searchDomain">
+
+    <div class="am-g">
+        <div class="am-u-lg-12">
+            <div class="am-input-group am-input-group-sm">
+                <span class="am-input-group-label ">名称</span>
+                <input type="text" class="am-form-field" placeholder="按名称搜索" name="name" ;>
+
+                <span class="am-input-group-btn am-margin-left-sm">
+                    <button class="am-btn am-btn-default" id="btnSearch" type="button">搜索</button>
+                    <button class="am-btn am-btn-default" onclick="ClearFilter()" type="button">清除</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid_container">
+    <table id="dataTable" class="am-table am-table-striped am-table-hover table-main">
+        <thead>
+            <tr>
+                <th dataname="id" type="checkbox"></th>
+                <th dataname="name">名称</th>
+                <th dataname="country_code">国家</th>
+                <th dataname="price">价格</th>
+                <th dataname="price_discount">折扣价</th>
+                <th dataname="stock_sum">库存</th>
+                <th dataname="sort_index">排序</th>
+                <th dataname="inbox_filter_name">接收过滤模块</th>
+                <th dataname="send_filter_name">发送过滤模块</th>
+                <th render="server_statu">发送状态</th>
+                <th render="statu">状态</th>
+                <th dataname="create_time" datatype="jsondate">创建日期</th>
+                <th type="eventlist"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function ClearFilter() {
+            $("#searchDomain input").val("");
+        }
+        $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
+        $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
+
+        function formInit(dataitem) {
+            //添加表单验证
+            $.Nuoya.form("form").validate({
+                rules: {
+                    name: {
+                        maxlength: 50,
+                        required: true,
+                    },
+                    description: {
+                        maxlength: 200,
+                        required: true,
+                    },
+                    url: {
+                        maxlength: 126,
+                    },
+                    price: {
+                        required: true,
+                    },
+                    price_discount: {
+                        required: true,
+                    },
+                    inbox_filter_name: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    send_filter_name: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    statu: {
+                        required: true,
+                    },
+                    sort_index:
+                    {
+                        required: true,
+                    },
+                    country_code:
+                    {
+                        required: true,
+                    },
+                    stock_sum:
+                    {
+                        required: true,
+                    },
+                    payment_type:
+                    {
+                        required: true,
+                    }
+                },
+                messages: {
+                    name: {
+                        maxlength: "最多{0}个字符",
+                        required: "名称不允许为空",
+                    },
+                    description: {
+                        maxlength: "最多{0}个字符",
+                        required: "申请说明不允许为空",
+                    },
+                    url: {
+                        maxlength: "最多{0}个字符",
+                    },
+                    price: {
+                        required: "价格不允许为空",
+                    },
+                    price_discount: {
+                        required: "折扣价不允许为空",
+                    },
+                    inbox_filter_name: {
+                        maxlength: "最多{0}个字符"
+                    },
+                    send_filter_name: {
+                        maxlength: "最多{0}个字符"
+                    },
+                    statu: {
+                        required: "状态不允许为空",
+                    },
+                    sort_index: {
+                        required: "排序不允许为空",
+                    },
+                    country_code: {
+                        required: "国家不允许为空",
+                    },
+                    stock_sum: {
+                        required: "库存不允许为空",
+                    },
+                    payment_type: {
+                        required: "支付方式不允许为空",
+                    },
+                }
+            });
+        }
+
+        var grid = $.Nuoya.grid({
+            tableId: "dataTable",
+            //表格id
+            search: {
+                domainId: "searchDomain",
+                subId: "btnSearch"
+            },
+            ajaxUrl: "/Admin/Project/GetPageList",
+            //数据请求地址
+            pageSize: 10,
+            events: [
+            {
+                className: "am-text-secondary",
+                icon: "icon-pencil-square-o",
+                name: "编辑",
+                click: function (item) {
+                    $.Nuoya.ajaxDialog({
+                        closeViaDimmer: false,
+                        ajaxUrl: "/Areas/Admin/HtmlTemplates/Project/Update.html",
+                        title: "编辑项目",
+                        callback: function (e) {
+                            $.Nuoya.action("/Admin/Project/Find", { id: item.id }, function (model) {
+                                formInit(model);//表单初始化
+                                //载入数据
+                                $.Nuoya.form("form").dataLoad({
+                                    data: model
+                                });
+                            });
+                        },
+                        buttons: [{
+                            label: "保存",
+                            callback: function (e) {
+
+                                $.Nuoya.form("form").ajaxSubmit({
+                                    ajaxUrl: "/Admin/Project/Update",
+                                    params: {
+                                        id: item.id
+                                    },
+                                    callback: function (data) {
+                                        if (!data.ErrorDesc) {
+                                            e.hide();
+                                            grid.reload();
+                                        }
+                                        else
+                                            $.Nuoya.alert(data.ErrorDesc);
+                                    }
+                                });
+                            }
+                        }]
+                    })
+                }
+            }
+            ,
+                {
+                    className: "am-text-danger",
+                    icon: "icon-trash-o",
+                    name: "删除",
+                    click: function (item) {
+                        $.Nuoya.confirm("确认删除？", function () {
+                            $.Nuoya.deleteAction("/Admin/Project/Delete", {
+                                ids: item.id
+                            },
+                            function () {
+                                grid.reload();
+                            });
+                        });
+                    }
+                }
+            ]
+        });
+    </script>
+}
