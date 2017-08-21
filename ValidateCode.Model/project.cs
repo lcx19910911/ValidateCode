@@ -24,15 +24,15 @@ namespace ValidateCode.Model
         [Column(TypeName = "numeric")]
         public decimal? price_discount { get; set; }
 
-        public CountryCode country_code { get; set; }
+        public int country_code { get; set; } = 42;
 
-        public int stock_sum { get; set; }
+        public int stock_sum { get; set; } = 0;
 
-        public int sort_index { get; set; }
+        public int sort_index { get; set; } = 0;
 
         public int? payment_type { get; set; }
 
-        public DateTime? create_time { get; set; }
+        public DateTime create_time { get; set; }
 
         public DateTime? last_modify_time { get; set; }
 
@@ -57,7 +57,7 @@ namespace ValidateCode.Model
         public DivideType divide_type { get; set; } = DivideType.money;
 
         /// <summary>
-        /// 固定抽成比例
+        /// 固定抽成金额
         /// </summary>
         [Column(TypeName = "numeric")]
         public decimal? divide_fixed_amount { get; set; }

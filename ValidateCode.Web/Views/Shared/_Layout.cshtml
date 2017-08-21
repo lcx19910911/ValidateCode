@@ -148,21 +148,21 @@
         <div class="admin-sidebar  am-offcanvas" id="admin-offcanvas">
             <div class="am-offcanvas-bar admin-offcanvas-bar">
                 <ul class="am-list admin-sidebar-list  am-text-sm">
-                    <li><a href="/user/index"><span class="am-icon-home"></span> 个人中心</a></li>
+                    <li><a href="/home/index"><span class="am-icon-home"></span> 个人中心</a></li>
                     <li><a href="/home/index"><span class="am-icon-home"></span> 获取验证码</a></li>
-                    <li><a href="/home/index"><span class="am-icon-home"></span> 项目列表</a></li>
+                    <li><a href="/project/index"><span class="am-icon-home"></span> 项目列表</a></li>
                     <li><a href="/home/index"><span class="am-icon-home"></span> 短信记录</a></li>
-                    <li><a href="/home/index"><span class="am-icon-home"></span> 充值记录</a></li>
+                    <li><a href="/recharge/index"><span class="am-icon-home"></span> 充值记录</a></li>
                     <li><a href="/home/index"><span class="am-icon-home"></span> 下线提成</a></li>
-                    <li><a href="/home/index"><span class="am-icon-home"></span> 提现记录</a></li>
-                    <li><a href="/home/index"><span class="am-icon-home"></span> 修改资料</a></li>                 
+                    <li><a href="/withdrawals/index"><span class="am-icon-home"></span> 提现记录</a></li>
+                    <li><a href="/account/register?id=@(LoginHelper.GetCurrentUser()?.ID)"><span class="am-icon-home"></span> 修改资料</a></li>                 
                 </ul>
             </div>
         </div>
         <!-- sidebar end -->
         <!-- content start -->
         <div class="admin-content">
-            <div>
+            <div style="margin-top:50px;">
                 @RenderBody()
             </div>
 

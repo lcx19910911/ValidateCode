@@ -12,28 +12,25 @@ using ValidateCode.DB;
 using ValidateCode.IService;
 using ValidateCode.Model;
 using ValidateCode.Core.Extensions;
+using ValidateCode.Core.Code;
 
 namespace ValidateCode.Service
 {
     /// <summary>
     /// 用户充值记录
     /// </summary>
-    public class RechargeService : BaseService<recharge>, IRechargeService
+    public class RechargeService : BaseService<app_user_bill>, IRechargeService
     {
-        public PageList<recharge> GetPageList(int pageIndex, int pageSize,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0)
+        public PageList<app_user_bill> GetPageList(int pageIndex, int pageSize, string name,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0)
         {
             using (DbRepository db = new DbRepository())
             {
-                var list = new List<recharge>();
-                var returnList = new List<recharge>();
+                var list = new List<app_user_bill>();
                 var count = 0;
                 if (userId!=0)
                 {
-                    var user = db.app_user.Find(userId);
-                    if (user != null&&user.UserRecharges!=null&&user.UserRecharges.Count>0)
-                    {
-                        var query = user.UserRecharges.AsQueryable().Include("User");
-                        if (createdTimeStart != null)
+                    var query = db.app_user_bill.Where(x => x.tran_type == TranType.recharge && x.statu == EntityStatu.normal && x.app_user_id == userId);
+                    if (createdTimeStart != null)
                         {
                             query = query.Where(x => x.create_time >= createdTimeStart);
                         }
@@ -44,12 +41,18 @@ namespace ValidateCode.Service
                         }
                         count = query.Count();
                         list = query.OrderByDescending(x => x.create_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-                    }
-                    
                 }
                 else
                 {
-                    var query = db.recharge.AsQueryable().Include("CreaterUser");
+                    var query = db.app_user_bill.Where(x => x.tran_type == TranType.recharge && x.statu == EntityStatu.normal);
+                    if (name.IsNotNullOrEmpty())
+                    {
+                        var userIdList = db.app_user.Where(x => x.statu == EntityStatu.normal && x.username.Contains(name)).Select(x => x.id).ToList();
+                        if (userIdList != null && userIdList.Count > 0)
+                        {
+                            query = query.Where(x => userIdList.Contains(x.id));
+                        }
+                    }
                     if (createdTimeStart != null)
                     {
                         query = query.Where(x => x.create_time >= createdTimeStart);
@@ -75,7 +78,7 @@ namespace ValidateCode.Service
                     //    VoucherNo=x.VoucherNo
                     //});
                 });
-                return CreatePageList(returnList, pageIndex, pageSize, count);
+                return CreatePageList(list, pageIndex, pageSize, count);
             }
          }
 
@@ -88,19 +91,31 @@ namespace ValidateCode.Service
         {
             if (id <= 0||orderId.IsNullOrEmpty())
             {
-                return Result(false, Core.Code.ErrorCode.sys_param_format_error);
+                return Result(false, ErrorCode.sys_param_format_error);
             }
             var model = Find(id);
             if (model == null)
             {
                 return Result(false, Core.Code.ErrorCode.sys_param_format_error);
             }
-            if (model.order_state == PayStatu.success)
+            if (model.audit_state == AuditState.success)
             {
                 return Result(false, Core.Code.ErrorCode.had_audit);
             }
 
+            model.third_order_id = orderId;
+            model.type = type;
+            model.audit_state = AuditState.success;
 
+            int result = Update(model);
+            if (result > 0)
+            {
+                return Result(true);
+            }
+            else
+            {
+                return Result(false, ErrorCode.sys_fail);
+            }
         }
     }
 }

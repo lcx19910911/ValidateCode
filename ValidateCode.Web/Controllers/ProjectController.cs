@@ -49,5 +49,22 @@ namespace ValidateCode.Web.Controllers
             return JResult(IProjectService.Find(id));
         }
 
+        [HttpPost]
+        public ActionResult Add(project model)
+        {
+            ModelState.Remove("id");
+            ModelState.Remove("create_time");
+            ModelState.Remove("country_code");
+            ModelState.Remove("pasword"); 
+            if (ModelState.IsValid)
+            {
+                var result = IProjectService.Manager(model);
+                return JResult(result);
+            }
+            else
+            {
+                return ParamsErrorJResult(ModelState);
+            }
+        }
     }
 }

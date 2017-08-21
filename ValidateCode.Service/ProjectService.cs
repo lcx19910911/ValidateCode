@@ -33,13 +33,12 @@ namespace ValidateCode.Service
         /// <returns></returns>
         public WebResult<bool> Manager(project model)
         {
-            var user = Find(model.id);
-            if (user == null)
+            var project = Find(model.id);
+            if (project == null)
             {
                 model.create_time = DateTime.Now;
                 model.sort_index = 0;
                 int id=Add(model);
-                int sortIndex = 0;
                 if (id > 0)
                 {
                     model.sort_index = id;
@@ -51,20 +50,7 @@ namespace ValidateCode.Service
             }
             else
             {
-
-                if (IsExits(x => x.username == model.username && x.id != model.id))
-                    return Result(false, ErrorCode.user_account_already_exist);
-
-                user.alipay_acc = model.alipay_acc;
-                user.alipay_name = model.alipay_name;
-                user.qq = model.qq;
-                user.phone = model.phone;
-                user.email = model.email;
-                if (model.vip_level != 0)
-                {
-                    user.vip_level = model.vip_level;
-                }
-                int result=Update(user);
+                int result=Update(model);
                 if (result > 0)
                 {
                     return Result(true);

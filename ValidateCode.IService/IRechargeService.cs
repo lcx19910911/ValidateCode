@@ -11,7 +11,7 @@ using ValidateCode.Model;
 
 namespace ValidateCode.IService
 {
-    public interface IRechargeService : IBaseService<recharge>
+    public interface IRechargeService : IBaseService<app_user_bill>
     {
 
         //                充值
@@ -22,9 +22,9 @@ namespace ValidateCode.IService
         /// <param name="pageSize">分页大小</param>
         /// <param name="title">标题 - 搜索项</param>
         /// <returns></returns>
-        PageList<recharge> GetPageList(int pageIndex, int pageSize, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0);
+        PageList<app_user_bill> GetPageList(int pageIndex, int pageSize,string name, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0);
 
-        WebResult<bool> Audit(int id);
+        WebResult<bool> HadPay(int id, string orderId, PayType type);
 
     }
 }

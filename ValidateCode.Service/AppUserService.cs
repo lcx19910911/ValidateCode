@@ -78,6 +78,7 @@ namespace ValidateCode.Service
                         model.invite_code = invateCode;
                     }
                 }
+                model.pasword = model.new_password;
                 model.reg_time = DateTime.Now;
                 int id=Add(model);
                 if (id > 0)

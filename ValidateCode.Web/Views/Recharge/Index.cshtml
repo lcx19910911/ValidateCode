@@ -1,21 +1,16 @@
 ﻿@{
-    ViewBag.Title = "计划投票管理";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "充值管理";
 }
 
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>计划投票管理</small></div>
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>充值管理</small></div>
 </div>
 <div id="searchDomain">
 
     <div class="am-g">
         <div class="am-u-lg-12">
             <div class="am-input-group am-input-group-sm">
-                <input type="hidden" name="planId" value="@(Request["planId"])" />
-                <span class="am-input-group-label">参与人姓名</span>
-                <input type="text" class="am-form-field" placeholder="按参与人姓名搜索" name="name" ;>
-
-                <span class="am-input-group-label  am-margin-left-sm">参与日期</span>
+                <span class="am-input-group-label">充值日期</span>
                 <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeStart" readonly style="width:auto;">
                 <span class="am-input-group-label"> - </span>
                 <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeEnd" readonly style="width:auto;">
@@ -32,11 +27,12 @@
         <thead>
             <tr>
                 <th dataname="ID" type="checkbox"></th>
-                <th render="showMeetName">会议名称</th>
-                <th render="showMeetPlanName">话题名称</th>
-                <th render="showUserName">参与人姓名</th>      
-                <th render="showUserHead">头像</th>          
-                <th dataname="CreatedTime" datatype="jsondate">参与日期</th>
+                <th dataname="amount">充值金额</th>
+                <th render="showType">支付方式</th>
+                <th dataname="third_order_id">支付订单号</th>
+                <th render="showState">状态</th>
+                <th dataname="audit_time" datatype="jsondate">审核日期</th>
+                <th dataname="create_time" datatype="jsondate">创建日期</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -52,7 +48,31 @@
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
- 
+        function showState(item)
+        {
+            switch (item.order_state)
+            {
+                case "1":
+                    return "等待支付";
+                    break;
+                case "2":
+                    return "支付成功";
+                    break;
+            }
+        }
+        function showType(item) {
+            switch (item.type) {
+                case "0":
+                    return "人工";
+                    break;
+                case "1":
+                    return "支付宝";
+                    break;
+                case "2":
+                    return "微信";
+                    break;
+            }
+        }
 
         var grid = $.Nuoya.grid({
             tableId: "dataTable",
@@ -61,7 +81,7 @@
                 domainId: "searchDomain",
                 subId: "btnSearch"
             },
-            ajaxUrl: "/Admin/PlanUserJoin/GetPageList",
+            ajaxUrl: "/Recharge/GetPageList",
             //数据请求地址
             pageSize: 10,
             events: [

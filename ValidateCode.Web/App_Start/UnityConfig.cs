@@ -41,6 +41,9 @@ namespace ValidateCode.Web.App_Start
             // TODO: Register your types here
             container.RegisterType<IAppUserService, AppUserService>();
             container.RegisterType<IAdminUserService, AdminUserService>();
+            container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IRechargeService, RechargeService>();
+            container.RegisterType<IWithdrawalsService, WithdrawalsService>();
 
             //container.RegisterType<IProductRepository, ProductRepository>
         }

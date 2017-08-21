@@ -11,7 +11,7 @@ namespace ValidateCode.Model
 
         public int app_user_id { get; set; }
 
-        public int tran_type { get; set; }
+        public TranType tran_type { get; set; }
 
         public int? tran_type_source { get; set; }
 
@@ -30,6 +30,52 @@ namespace ValidateCode.Model
 
         public DateTime create_time { get; set; }
 
-        public int statu { get; set; }
+        public string third_order_id { get; set; }
+
+        public AuditState audit_state { get; set; } = AuditState.success;
+
+        public DateTime? audit_time { get; set; }
+
+        public PayType? type { get; set; } = PayType.people;
+
+    }
+
+
+
+    //1-用户充值  2-接收短信 3-发送短信  4-扣款  5-退款  6-提现  7-推广提成
+    public enum TranType
+    {
+        recharge=1,
+
+        reviceSms=2,
+
+        sendSms=3,
+
+        debit=4,
+
+        returnPay=5,
+
+        withdrawls=6,
+
+        invate=7,
+
+    }
+
+    public enum PayType
+    {
+        people=0,
+
+        alipay=1,
+
+        wechat=2,
+    }
+
+    public enum AuditState
+    {
+        wait=0,
+
+        success=1,
+
+        reject=2,
     }
 }

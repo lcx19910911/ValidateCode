@@ -48,7 +48,7 @@ namespace ValidateCode.Model
         [StringLength(20)]
         public string alipay_name { get; set; }
 
-        public int? discount { get; set; }
+        public int? discount { get; set; } = 100;
 
         [StringLength(6)]
         public string invite_code { get; set; }
@@ -80,24 +80,9 @@ namespace ValidateCode.Model
         [NotMapped]
         public string confirm_password { get; set; }
 
-        /// <summary>
-        /// 充值总额
-        /// </summary>
-        [Display(Name = "充值总额")]
-        [Column(TypeName = "numeric")]
-        public decimal? total_recharge { get; set; }
-        [JsonIgnore]
-        public virtual List<recharge> UserRecharges { get; set; }
 
-        /// <summary>
-        /// 提现总额
-        /// </summary>
-        [Display(Name = "提现总额")]
         [Column(TypeName = "numeric")]
-        public decimal? total_withdrawals { get; set; }
-        [JsonIgnore]
-        public virtual List<withdrawals> UserWithdrawals { get; set; }
-
+        public decimal? invite_funds { get; set; }
 
 
         [Column(TypeName = "numeric")]
