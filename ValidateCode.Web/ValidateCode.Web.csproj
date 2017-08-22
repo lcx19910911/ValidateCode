@@ -176,18 +176,20 @@
     <Content Include="Areas\Admin\HtmlTemplates\Meet\Update.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Project\Add.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Project\Update.html" />
-    <Content Include="Areas\Admin\HtmlTemplates\Room\Update.html" />
-    <Content Include="Areas\Admin\HtmlTemplates\Speaker\Index.html" />
-    <Content Include="Areas\Admin\HtmlTemplates\Speaker\Update.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Recharge\Index.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Recharge\Add.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\ChangePassword.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\Update.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Add.html" />
     <Content Include="Global.asax" />
     <Content Include="Images\1.png" />
     <Content Include="Images\2.png" />
     <Content Include="Images\3.png" />
     <Content Include="Images\4.png" />
+    <Content Include="Images\404Pic.png" />
     <Content Include="Images\5.png" />
     <Content Include="Images\6.png" />
+    <Content Include="Images\loading.jpg" />
     <Content Include="Scripts\amazeui.js" />
     <Content Include="Scripts\amazeui.min.js" />
     <Content Include="Scripts\artDialog.js" />
@@ -382,7 +384,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52688</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

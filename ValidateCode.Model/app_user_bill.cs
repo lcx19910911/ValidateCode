@@ -30,6 +30,7 @@ namespace ValidateCode.Model
 
         public DateTime create_time { get; set; }
 
+        [StringLength(32)]
         public string third_order_id { get; set; }
 
         public AuditState audit_state { get; set; } = AuditState.success;

@@ -43,39 +43,32 @@ namespace ValidateCode.Web.Controllers
         {
             return JResult(IWithdrawalsService.GetPageList(pageIndex, pageSize,null, createdTimeStart, createdTimeEnd, this.LoginUser.ID));
         }
-
         /// <summary>
         /// 查找
         /// </summary>
         /// <returns></returns>
-        public ActionResult Add(app_user_bill model)
+        public ActionResult Add(decimal amount)
         {
-            ModelState.Remove("id");
-            ModelState.Remove("create_time");
-            ModelState.Remove("audit_state");
-            ModelState.Remove("order_info");
-            if (ModelState.IsValid)
-            {
-                model.tran_type = TranType.withdrawls;
-                model.create_time = DateTime.Now;
-                model.audit_state = AuditState.wait;
-                var user = IAppUserService.Find(this.LoginUser.ID);
-                if(user!=null)
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
-                model.before_funds = user.invite_funds;
-                model.after_funds = user.invite_funds - model.amount;
-                model.order_info = $"用户{this.LoginUser.Account},申请提现金额{model.amount}";
-                var result = IWithdrawalsService.Add(model);
-                if (result > 0)
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = true });
-                else
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
-            }
+            var model = new app_user_bill();
+            model.tran_type = TranType.withdrawls;
+            model.create_time = DateTime.Now;
+            model.audit_state = AuditState.wait;
+            model.app_user_id = this.LoginUser.ID;
+            model.type = PayType.alipay;
+            model.amount = amount;
+            var user = IAppUserService.Find(this.LoginUser.ID);
+            if (user == null)
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
+            if (user.invite_funds < model.amount)
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "提现金额超出用户提成总额" });
+            model.before_funds = user.invite_funds;
+            model.after_funds = user.invite_funds - model.amount;
+            model.order_info = $"用户{this.LoginUser.Account},申请提现金额{model.amount}";
+            var result = IWithdrawalsService.Add(model);
+            if (result > 0)
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = true });
             else
-            {
-                return ParamsErrorJResult(ModelState);
-            }
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
         }
-
     }
 }
