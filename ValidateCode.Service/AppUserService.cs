@@ -69,6 +69,7 @@ namespace ValidateCode.Service
             var user = Find(model.id);
             if (user == null)
             {
+                //生成用户邀请码
                 var invateCode = new Random().Next(100000, 999999).ToString();
                 var isExit = true;
                 while (isExit)
@@ -83,6 +84,17 @@ namespace ValidateCode.Service
                         model.invite_code = invateCode;
                     }
                 }
+                //检查邀请码
+                if (!IsExits(x => x.invite_code == model.invite_code))
+                {
+                    return Result(false, ErrorCode.sys_param_format_error);
+                }
+                var inviteUser = Find(x => x.invite_code == model.invite_code && x.statu == EntityStatu.normal);
+                if (inviteUser == null)
+                {
+                    return Result(false, ErrorCode.invite_code_error);
+                }
+                model.invite_user_id = inviteUser.id;
                 model.pasword = model.new_password;
                 model.reg_time = DateTime.Now;
                 int id=Add(model);

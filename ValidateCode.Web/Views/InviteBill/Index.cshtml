@@ -1,9 +1,9 @@
 ﻿@{
-    ViewBag.Title = "提现管理";
+    ViewBag.Title = "下线提成";
 }
 
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>提现管理</small></div>
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>下线提成</small></div>
 </div>
 <div id="searchDomain">
 
@@ -29,25 +29,17 @@
         </div>
     </div>
 </div>
-<div class="am-g am-margin-top">
-    <div class="am-u-lg-12">
-        <div class="am-btn-toolbar">
-            <div class="am-btn-group am-btn-group-xs">
-                <button onclick="add()" type="button" class="am-btn am-btn-xs"><span class="am-icon-plus"></span> 新增</button>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="grid_container">
     <table id="dataTable" class="am-table am-table-striped am-table-hover table-main">
         <thead>
             <tr>
                 <th dataname="id" type="checkbox"></th>
-                <th dataname="amount">金额</th>
-                <th render="showPayType">方式</th>
-                <th render="showAuditState">状态</th>
-                <th dataname="audit_time" datatype="jsondateNo">审核</th>
-                <th dataname="create_time" datatype="jsondateNo">创建</th>
+                <th dataname="project_name">项目</th>
+                <th dataname="amount">提成</th>
+                <th dataname="price">价格</th>
+                <th dataname="price_discount">折扣价</th>
+                <th render="showState">状态</th>
+                <th dataname="verify_time" datatype="jsondateNo">完成</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -63,40 +55,15 @@
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
-        function showState(item)
-        {
-            switch (item.order_state)
-            {
-                case 1:
-                    return "等待支付";
+        function showState(item) {
+            switch (item.invite_state) {
+                case 1200:
+                    return "可用";
                     break;
-                case 2:
-                    return "支付成功";
+                case 1201:
+                    return "禁用";
                     break;
             }
-        }
-        function add() {
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                ajaxUrl: "/Areas/Admin/HtmlTemplates/Withdrawals/Add.html",
-                title: "用户提现",
-                callback: function (e) {      
-                },
-                buttons: [{
-                    label: "保存",
-                    callback: function (e) {
-                        var amount = $("#form [name='amount']").val();
-                        $.Nuoya.ajaxGet("/Withdrawals/add", { amount: amount }, function (data) {
-                            if (data.Code==0) {
-                                e.hide();
-                                grid.reload();
-                            }
-                            else
-                                $.Nuoya.alert(data.Append);
-                        })
-                    }
-                }]
-            })
         }
 
         var grid = $.Nuoya.grid({
@@ -107,7 +74,7 @@
                 subId: "btnSearch"
             },
             isForPhone: true,
-            ajaxUrl: "/Withdrawals/GetPageList",
+            ajaxUrl: "/InviteBill/GetPageList",
             //数据请求地址
             pageSize: 10,
             events: [

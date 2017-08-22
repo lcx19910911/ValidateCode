@@ -1,16 +1,16 @@
 ﻿@{
-    ViewBag.Title = "提现管理";
+    ViewBag.Title = "短信接收记录";
 }
 
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>提现管理</small></div>
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>短信接收记录</small></div>
 </div>
 <div id="searchDomain">
 
     <div class="am-g">
         <div class="am-u-lg-12">
             <div class="am-input-group am-input-group-sm">
-                <span class="am-input-group-label">提现日期</span>
+                <span class="am-input-group-label">发送日期</span>
                 <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeStart" readonly style="width:auto;">
                 <span class="am-input-group-label"> - </span>
             </div>
@@ -43,11 +43,12 @@
         <thead>
             <tr>
                 <th dataname="id" type="checkbox"></th>
-                <th dataname="amount">金额</th>
-                <th render="showPayType">方式</th>
-                <th render="showAuditState">状态</th>
-                <th dataname="audit_time" datatype="jsondateNo">审核</th>
-                <th dataname="create_time" datatype="jsondateNo">创建</th>
+                <th dataname="project_name">项目名称</th>
+                <th dataname="phone_num">号码</th>
+                <th dataname="phone_text">文本</th>
+                <th dataname="price">价格</th>
+                <th dataname="price_discount">折扣价</th>
+                <th dataname="receive_time" datatype="jsondateNo">接收时间</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -62,43 +63,6 @@
         }
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
-
-        function showState(item)
-        {
-            switch (item.order_state)
-            {
-                case 1:
-                    return "等待支付";
-                    break;
-                case 2:
-                    return "支付成功";
-                    break;
-            }
-        }
-        function add() {
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                ajaxUrl: "/Areas/Admin/HtmlTemplates/Withdrawals/Add.html",
-                title: "用户提现",
-                callback: function (e) {      
-                },
-                buttons: [{
-                    label: "保存",
-                    callback: function (e) {
-                        var amount = $("#form [name='amount']").val();
-                        $.Nuoya.ajaxGet("/Withdrawals/add", { amount: amount }, function (data) {
-                            if (data.Code==0) {
-                                e.hide();
-                                grid.reload();
-                            }
-                            else
-                                $.Nuoya.alert(data.Append);
-                        })
-                    }
-                }]
-            })
-        }
-
         var grid = $.Nuoya.grid({
             tableId: "dataTable",
             //表格id
@@ -107,7 +71,7 @@
                 subId: "btnSearch"
             },
             isForPhone: true,
-            ajaxUrl: "/Withdrawals/GetPageList",
+            ajaxUrl: "/SMSInbox/GetPageList",
             //数据请求地址
             pageSize: 10,
             events: [

@@ -175,6 +175,12 @@ namespace ValidateCode.Core.Code
         [Description("已过验证时间.")]
         verification_time_out = 704,
 
+        /// <summary>
+        /// 邀请码错误
+        /// </summary>
+        [Description("邀请码错误.")]
+        invite_code_error = 705,
+
         #endregion
 
 

@@ -293,6 +293,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InviteBillController.cs" />
     <Compile Include="Controllers\WithdrawalsController.cs" />
     <Compile Include="Controllers\RechargeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -336,6 +337,9 @@
     <Content Include="Views\Withdrawals\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Recharge\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Withdrawals\Index.cshtml" />
+    <Content Include="Views\InviteBill\Index.cshtml" />
+    <Content Include="Views\SMSInbox\Index.cshtml" />
+    <Content Include="Views\SMSSend\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

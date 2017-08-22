@@ -1,6 +1,7 @@
 ﻿@model app_user
 @{
     Layout = null;
+    var code = Request["invite_code"];
 }
 
 <!DOCTYPE html>
@@ -71,6 +72,20 @@
                     <lable class="info">支付宝账号:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="text" placeholder="请输入支付宝账号" name="alipay_acc" maxlength="32" value="@(Model.alipay_acc)" />
                     <div class="clear"> </div>
                 </li>
+                @if (Model.id == 0)
+                {
+                    if (code.IsNotNullOrEmpty() && code.Length == 6)
+                    {
+                    <input  type="hidden" name="invite_code" value="@(code)"/>
+                    }
+                    else
+                    {
+                    <li>
+                        <lable class="info">邀请码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="number"  name="invite_code" maxlength="6" value="@(Model.invite_code)" />
+                        <div class="clear"> </div>
+                    </li>
+                    }
+                }
                 <li>
                     <lable class="info">验证码:<strong class="am-text-danger am-text-sm">*</strong></lable>
                     <div style="width:70%;float:left;">
@@ -140,6 +155,9 @@
                         },
                         code: {
                             required: true
+                        },
+                        invite_code: {
+                            required: true
                         }
                     },
                     messages: {
@@ -172,6 +190,9 @@
                             maxlength: "最多{0}个字符"
                         },
                         code: {
+                            required: "验证码不允许为空",
+                        },
+                        invite_code: {
                             required: "验证码不允许为空",
                         },
                     }

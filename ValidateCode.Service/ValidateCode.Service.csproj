@@ -68,6 +68,9 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RechargeService.cs" />
+    <Compile Include="InviteBillService.cs" />
+    <Compile Include="SMSSendService.cs" />
+    <Compile Include="SMSInboxService.cs" />
     <Compile Include="WithdrawalsService.cs" />
   </ItemGroup>
   <ItemGroup>
