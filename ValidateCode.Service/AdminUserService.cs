@@ -59,7 +59,7 @@ namespace ValidateCode.Service
                 int id=Add(model);
                 if (id > 0)
                 {
-                    LoginHelper.CreateUser(new LoginUser(id,model.account,false));
+                    LoginHelper.CreateUser(new LoginUser(id,model.account,false),Params.UserCookieName);
                     return Result(true);
                 }
                 else

@@ -47,6 +47,7 @@
                 <th dataname="qq">qq</th>
                 <th dataname="email">email</th>
                 <th dataname="funds">余额</th>
+                <th dataname="invite_funds">推广余额</th>
                 <th dataname="phone">手机号</th>
                 <th dataname="vip_level">Vip等级</th>
                 <th dataname="invite_code">邀请码</th>
@@ -150,6 +151,8 @@
                             closeViaDimmer: false,
                             ajaxUrl: "/Areas/Admin/HtmlTemplates/User/Update.html",
                             title: "编辑用户",
+                            width: "800px",
+                            height:"500px",
                             callback: function (e) {
                                 $.Nuoya.action("/Admin/User/Find", { id: item.id }, function (model) {
                                     formInit(model);//表单初始化
@@ -186,10 +189,47 @@
                 ,
             {
                 className: "am-text-danger",
+                icon: "icon-plus",
+                name: "充值",
+                click: function (item) {
+                    $.Nuoya.ajaxDialog({
+                        closeViaDimmer: false,
+                        ajaxUrl: "/Areas/Admin/HtmlTemplates/Recharge/Add.html",
+                        title: "充值",
+                        callback: function (e) {
+                        },
+                        buttons: [{
+                            label: "保存",
+                            callback: function (e) {
+                                    if ($("#form [name='amount']").val() == "") {
+                                        $.Nuoya.alert("请输入固定抽成金额");
+                                    }
+                                $.Nuoya.form("form").ajaxSubmit({
+                                    ajaxUrl: "/Admin/User/Recharge",
+                                    params: {
+                                        app_user_id: item.id
+                                    },
+                                    callback: function (data) {
+                                        if (data.Code==0) {
+                                            e.hide();
+                                            grid.reload();
+                                        }
+                                        else
+                                            $.Nuoya.alert("参数错误");
+                                    }
+                                });
+                            }
+                        }]
+                    })
+                }
+            }
+                ,
+            {
+                className: "am-text-danger",
                 icon: "icon-hand-rock-o",
                 name: "重置密码",
                 click: function (item) {
-                    changePassword(item.id);
+                    changePassword(false,item.id);
                 }
             }
                 ,

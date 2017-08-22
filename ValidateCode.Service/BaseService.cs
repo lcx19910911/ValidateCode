@@ -204,7 +204,7 @@ namespace ValidateCode.Service
                 var sourceEntity =ID==null?dbSet.Find(source.id): dbSet.Find(ID);
                 if (sourceEntity != null)
                 {
-                    //source.AutoMap<T>(sourceEntity);
+                    source.AutoMap<T>(sourceEntity);
                 }
                 return db.SaveChanges();
             }

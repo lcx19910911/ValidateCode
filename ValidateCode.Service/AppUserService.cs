@@ -40,9 +40,14 @@ namespace ValidateCode.Service
                 {
                     return Result(new app_user() { }, ErrorCode.verification_time_out);
                 }
-                string md5Password = Core.Util.CryptoHelper.MD5_Encrypt(password);
 
-                return Result(Find(x => x.username == name && x.pasword == md5Password && x.statu != EntityStatu.delete));
+                var user = Find(x => x.username == name && x.pasword == password && x.statu != EntityStatu.delete);
+                if(user!=null)
+                {
+                    user.login_ip = Client.IP;
+                    user.login_time = DateTime.Now;
+                }
+                return Result(user);
             }
         }
 
@@ -83,7 +88,7 @@ namespace ValidateCode.Service
                 int id=Add(model);
                 if (id > 0)
                 {
-                    LoginHelper.CreateUser(new LoginUser(id,model.username,false));
+                    LoginHelper.CreateUser(new LoginUser(id,model.username,false), Params.UserCookieName);
                     return Result(true);
                 }
                 else
@@ -181,7 +186,6 @@ namespace ValidateCode.Service
                 if (!user.pasword.Equals(oldPassword))
                     return Result(false, ErrorCode.user_password_nottrue);
             }
-            newPassword = CryptoHelper.MD5_Encrypt(newPassword);
             user.pasword = newPassword;
             Update(user);
             return Result(true);

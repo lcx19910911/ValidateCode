@@ -7,14 +7,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@title - 登录</title>
+    <title>@title - 用户登录</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="@title - 登录"/>
+    <meta name="keywords" content="@title - 用户登录"/>
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <link href="~/Styles/reg.css" rel="stylesheet" />
     <link href="~/Scripts/tipso/css/tipso.min.css" rel="stylesheet" />
@@ -28,7 +28,7 @@
 <body>
     <div class="main">
         <div class="header">
-            <h1>@title - 登录</h1>
+            <h1>@title - 用户登录</h1>
         </div>
         <form>
             <ul class="dataform">
@@ -89,7 +89,8 @@
                             window.location.href = "/Home/Index";
                     }
                     else {
-                        alert(data.ErrorDesc);
+                        alert(data.Append);
+                        $("#img_code").attr("src", "/account/validatecode?r=" + Math.random());
                     }
                 }
             });

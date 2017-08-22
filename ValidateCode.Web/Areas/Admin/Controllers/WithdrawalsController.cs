@@ -18,10 +18,12 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
     public class WithdrawalsController : BaseAdminController
     {
         public IWithdrawalsService IWithdrawalsService;
+        public IAppUserService IAppUserService;
 
-        public WithdrawalsController(IWithdrawalsService _IWithdrawalsService)
+        public WithdrawalsController(IWithdrawalsService _IWithdrawalsService, IAppUserService _IAppUserService)
         {
             this.IWithdrawalsService = _IWithdrawalsService;
+            this.IAppUserService = _IAppUserService;
         }
         // GET: 
         public ActionResult Index()
@@ -46,9 +48,29 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         /// 查找
         /// </summary>
         /// <returns></returns>
-        public ActionResult Audit(int id,AuditState state,string orderId,PayType? type)
+        public ActionResult Find(int id)
         {
-             return JResult(IWithdrawalsService.Audit(id, state, type, orderId));
+            var model = IWithdrawalsService.Find(id);
+            if (model!= null)
+            {
+                var user = IAppUserService.Find(model.app_user_id);
+                if (user != null)
+                {
+                    model.before_funds = user.invite_funds;
+                    model.after_funds = user.invite_funds - model.amount;
+                }
+            }
+            return JResult(model);
+        }
+
+
+        /// <summary>
+        /// 查找
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Audit(int id,AuditState audit_state, string third_order_id, PayType? type)
+        {
+             return JResult(IWithdrawalsService.Audit(id, audit_state, type, third_order_id));
         }
 
     }

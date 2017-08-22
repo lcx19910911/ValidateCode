@@ -26,6 +26,9 @@ namespace ValidateCode.Core
         /// 登陆cookie
         /// </summary>
         public static readonly string UserCookieName = "website_user";
+        /// 登陆cookie
+        /// </summary>
+        public static readonly string AdminCookieName = "website_admin";
 
         /// <summary>
         /// 已收短信表(statu)  只对用户显示该值的短信

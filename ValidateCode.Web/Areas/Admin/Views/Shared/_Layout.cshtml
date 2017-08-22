@@ -82,37 +82,18 @@
                     break;
             }
         }
-        function userInfo() {
 
+        function changePassword(isAdmin,id) {
             $.Nuoya.ajaxDialog({
                 closeViaDimmer: false,
-                addIframe: true,
-                width: (isForPhone ? (($(window).width() - 40) + "px") : "1200px"),
-                height: (isForPhone ? (($(window).height() - 300) + "px") : "780px"),
-                ajaxUrl: "/Account/Register?info=true&id=@(LoginHelper.GetCurrentUser().ID)",
-                title: "作者信息",
-                callback: function (e) {
-                    $(window.frames["alrtIframe"]).css("width", "90%");
-                    //iframeObj.find("#regForm .main").css("margin-top", "-300px");
-                    if (isForPhone) {
-                        $(".am-modal-alert").css({ "top": "30%" }, { "left": "10%" });
-                        $(".am-text-right").hide();
-                    }
-                }
-            });
-        }
-        function changePassword() {
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                width: (isForPhone ? (($(window).width() - 40) + "px") : "800px"),
-                height: (isForPhone ? (($(window).height() - 300) + "px") : "280px"),
-                ajaxUrl: "/HtmlTemplates/Admin/ChangePassword.html",
+                width: "800px",
+                height:  "280px",
+                ajaxUrl: "/HtmlTemplates/User/ChangePassword.html",
                 title: "修改密码",
                 callback: function (e) {
                         $(".am-modal-alert").css({ "top": "35%" }, { "left": "10%" });
                         $(".am-text-right").hide();
                 },
-                isForPhone: isForPhone,
                 buttons: [{
                     label: "保存",
                     callback: function (e) {
@@ -126,7 +107,9 @@
                                 $.Nuoya.alert("密码不能为空");
                                 return false;
                             }
-                            $.Nuoya.action("/account/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)'  }, function (data) {
+                            var url = isAdmin ? "/account/ChangeAdminPassword" : "/account/ChangePassword";
+                            var changeId = isAdmin ? "@(LoginHelper.GetCurrentAdmin()?.ID)" : id;
+                            $.Nuoya.action(url, { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: changeId }, function (data) {
                                 if (!data.ErrorDesc) {
                                     $.Nuoya.alert("修改密码成功");
                                     e.hide();
@@ -163,9 +146,9 @@
         <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
         <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
             <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
-                <li><a href="javascript:userInfo()"><span class="am-icon-user">@(LoginHelper.GetCurrentUser()?.Account)</span></a></li>
-                <li><a href="javascript:changePassword()"><span class="am-icon-download">修改密码</span></a></li>
-                <li><a href="/account/Quit" class="admin-quit"><span class="am-icon-sign-out"></span> <span>注销</span></a></li>
+                <li><a href="javascript:userInfo()"><span class="am-icon-user">@)</span></a></li>
+                <li><a href="javascript:changePassword(true)"><span class="am-icon-download">修改密码</span></a></li>
+                <li><a href="/account/AdminQuit" class="admin-quit"><span class="am-icon-sign-out"></span> <span>注销</span></a></li>
             </ul>
         </div>
     </header>
@@ -188,7 +171,10 @@
         <div class="admin-sidebar  am-offcanvas" id="admin-offcanvas">
             <div class="am-offcanvas-bar admin-offcanvas-bar">
                 <ul class="am-list admin-sidebar-list  am-text-sm">
-                    <li><a href="/admin/user/index"><span class="am-icon-home"></span> 个人中心</a></li>
+                    <li><a href="/admin/withdrawals/index"><span class="am-icon-home"></span> 提现管理</a></li>
+                    <li><a href="/admin/recharge/index"><span class="am-icon-home"></span> 充值管理</a></li>
+                    <li><a href="/admin/user/index"><span class="am-icon-home"></span> 用户管理</a></li>
+                    <li><a href="/admin/project/index"><span class="am-icon-home"></span> 项目管理</a></li>
                     <li class="admin-parent">
                         <a data-am-collapse="{target: '#会议管理'}" class="am-cf">
                             <span class="am-icon-calculator"></span> 会议管理

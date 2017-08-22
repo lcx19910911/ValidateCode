@@ -65,19 +65,18 @@ namespace ValidateCode.Service
                     count = query.Count();
                     list = query.OrderByDescending(x => x.create_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
                 }
-                list.ForEach(x =>
+                if (userId == 0)
                 {
-                    //returnList.Add(new Recharge()
-                    //{
-                    //    UserName=x.User.NickName,
-                    //    CreaterUserName=x.CreaterUser.NickName,
-                    //    CreatedTime=x.CreatedTime,
-                    //    Count=x.Count,
-                    //    ID=x.ID,
-                    //    VoucherImg=x.VoucherImg,
-                    //    VoucherNo=x.VoucherNo
-                    //});
-                });
+                    var userIdList = list.Select(x => x.app_user_id).ToList();
+                    var userDic = db.app_user.Where(x => userIdList.Contains(x.id) && x.statu == EntityStatu.normal).ToDictionary(x => x.id);
+                    list.ForEach(x =>
+                    {
+                        if (x.app_user_id != 0 && userDic.ContainsKey(x.app_user_id))
+                        {
+                            x.app_user_name = userDic[x.app_user_id].username;
+                        }
+                    });
+                }
                 return CreatePageList(list, pageIndex, pageSize, count);
             }
          }

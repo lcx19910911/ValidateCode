@@ -61,12 +61,10 @@ namespace ValidateCode.Web.Controllers
                 return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
             if (user.invite_funds < model.amount)
                 return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "提现金额超出用户提成总额" });
-            model.before_funds = user.invite_funds;
-            model.after_funds = user.invite_funds - model.amount;
             model.order_info = $"用户{this.LoginUser.Account},申请提现金额{model.amount}";
             var result = IWithdrawalsService.Add(model);
             if (result > 0)
-                return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = true });
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_success, Result = true });
             else
                 return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
         }

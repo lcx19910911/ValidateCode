@@ -27,41 +27,38 @@ namespace ValidateCode.Web.Filters
             string token = filterContext.HttpContext.Request["token"];
             string info = filterContext.HttpContext.Request["info"];
 
-            if (controller.LoginUser == null)
+
+            if (areaName != null)
             {
-                if (areaName != null)
+                if (controller.LoginAdmin == null)
                 {
-                        RedirectResult redirectResult = new RedirectResult("/account/adminlogin?redirecturl=" + requestUrl);
-                        filterContext.Result = redirectResult;
-                }
-                else if (!controllerName.Equals("login", StringComparison.OrdinalIgnoreCase))
-                {
-                    var actionMethod = actionMethodList.Where(x => x.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (actionMethod != null)
-                    {
-                        if (actionMethod.ReturnType.Name == "ViewResult" || actionMethod.ReturnType.Name == "ActionResult")
-                        {
-                            RedirectResult redirectResult = new RedirectResult("/account/login?redirecturl=" + requestUrl);
-                            filterContext.Result = redirectResult;
-                        }
-                        else if (actionMethod.ReturnType.Name == "JsonResult")
-                        {
-                            JsonResult jsonResult = new JsonResult();
-                            jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-                            filterContext.RequestContext.HttpContext.Response.StatusCode = 9999;
-                            filterContext.Result = jsonResult;
-                        }
-                    }
+                    RedirectResult redirectResult = new RedirectResult("/account/adminlogin?redirecturl=" + requestUrl);
+                    filterContext.Result = redirectResult;
                 }
             }
             else
             {
-                if (areaName != null)
+
+                if (controller.LoginUser == null)
                 {
-                    if (!controller.LoginUser.Account.Equals("Admin",StringComparison.OrdinalIgnoreCase))
+                    if (!controllerName.Equals("login", StringComparison.OrdinalIgnoreCase))
                     {
-                        RedirectResult redirectResult = new RedirectResult("/account/adminlogin?redirecturl=" + requestUrl);
-                        filterContext.Result = redirectResult;
+                        var actionMethod = actionMethodList.Where(x => x.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (actionMethod != null)
+                        {
+                            if (actionMethod.ReturnType.Name == "ViewResult" || actionMethod.ReturnType.Name == "ActionResult")
+                            {
+                                RedirectResult redirectResult = new RedirectResult("/account/login?redirecturl=" + requestUrl);
+                                filterContext.Result = redirectResult;
+                            }
+                            else if (actionMethod.ReturnType.Name == "JsonResult")
+                            {
+                                JsonResult jsonResult = new JsonResult();
+                                jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                                filterContext.RequestContext.HttpContext.Response.StatusCode = 9999;
+                                filterContext.Result = jsonResult;
+                            }
+                        }
                     }
                 }
             }

@@ -9,6 +9,7 @@ using ValidateCode.Core.Extensions;
 using System.Web.SessionState;
 using System.Web.Security;
 using ValidateCode.Model;
+using ValidateCode.Core.Helper;
 
 namespace ValidateCode.Core.Model
 {
@@ -40,6 +41,30 @@ namespace ValidateCode.Core.Model
         /// 日志编码
         /// </summary>
         public LogCode LogCode { get; set; } = LogCode.None;
+        private LoginUser _loginAdmin = null;
+
+        public LoginUser LoginAdmin
+        {
+            get
+            {
+                if (_loginAdmin == null)
+                {
+                    var cookie = this.Request.Cookies[Params.AdminCookieName];
+                    if (cookie != null)
+                        return CryptoHelper.AES_Decrypt(this.Request.Cookies[Params.AdminCookieName].Value, Params.SecretKey).DeserializeJson<LoginUser>();
+                    else
+                        return null;
+                }
+                else
+                {
+                    return _loginAdmin;
+                }
+            }
+            set
+            {
+                LoginHelper.CreateUser(value, Params.AdminCookieName);
+            }
+        }
 
         private LoginUser _loginUser = null;
 
@@ -47,11 +72,22 @@ namespace ValidateCode.Core.Model
         {
             get
             {
-                return _loginUser != null ? _loginUser : LoginHelper.GetCurrentUser();
+                if (_loginUser == null)
+                {
+                    var cookie = this.Request.Cookies[Params.UserCookieName];
+                    if (cookie != null)
+                        return CryptoHelper.AES_Decrypt(this.Request.Cookies[Params.UserCookieName].Value, Params.SecretKey).DeserializeJson<LoginUser>();
+                    else
+                        return null;
+                }
+                else
+                {
+                    return _loginUser;
+                }
             }
             set
             {
-                LoginHelper.CreateUser(value);
+                LoginHelper.CreateUser(value, Params.UserCookieName);
             }
         }
         private string _postData = null;

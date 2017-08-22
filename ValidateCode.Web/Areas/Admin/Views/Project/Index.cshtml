@@ -35,13 +35,13 @@
                 <th render="showDivideType">抽成方式</th>
                 <th dataname="divide_fixed_amount">固定抽成金额</th>
                 <th dataname="divide_ratio_value">比例值</th>
-                <th dataname="stock_sum"  isHide="1">库存</th>
-                <th dataname="sort_index"  isHide="1">排序</th>
-                <th dataname="inbox_filter_name"  isHide="1">接收过滤模块</th>
-                <th dataname="send_filter_name"  isHide="1">发送过滤模块</th>
-                <th dataname="server_statu"  isHide="1">发送状态</th>
-                <th render="showStatu">状态</th>
+                <th render="showProjectStatu">状态</th>
                 <th dataname="create_time" datatype="jsondate">创建日期</th>
+                <th dataname="stock_sum" isHide="1" style="display:none;">库存</th>
+                <th dataname="sort_index" isHide="1" style="display:none;">排序</th>
+                <th dataname="inbox_filter_name" isHide="1" style="display:none;">接收过滤模块</th>
+                <th dataname="send_filter_name" isHide="1" style="display:none;">发送过滤模块</th>
+                <th dataname="server_statu" isHide="1" style="display:none;">发送状态</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -57,12 +57,12 @@
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
-        function showStatu(item) {
+        function showProjectStatu(item) {
             switch (item.project_state) {
-                case "1200":
+                case 1200:
                     return "可用";
                     break;
-                case "1201":
+                case 1201:
                     return "禁用";
                     break;
             }
@@ -71,10 +71,10 @@
         function showDivideType(item)
         {
             switch (item.divide_type) {
-                case "1":
+                case 1:
                     return "按固定金额";
                     break;
-                case "2":
+                case 2:
                     return "按比例";
                     break;
             }
@@ -193,6 +193,8 @@
                             closeViaDimmer: false,
                             ajaxUrl: "/Areas/Admin/HtmlTemplates/Project/Update.html",
                             title: "编辑项目",
+                            width: "800px",
+                            height: "600px",
                             callback: function (e) {
                                 $.Nuoya.action("/Admin/Project/Find", { id: item.id }, function (model) {
                                     formInit(model);//表单初始化
@@ -206,12 +208,12 @@
                                 label: "保存",
                                 callback: function (e) {
                                     if ($("#form [name='divide_type']").val() == "1") {
-                                        if ($("#form [name=''divide_fixed_amount]").val() == "") {
+                                        if ($("#form [name='divide_fixed_amount']").val() == "") {
                                             $.Nuoya.alert("请输入固定抽成金额");
                                         }
                                     }
                                     else {
-                                        if ($("#form [name=''divide_ratio_value]").val() == "") {
+                                        if ($("#form [name='divide_ratio_value']").val() == "") {
                                             $.Nuoya.alert("请输入固定抽成比率");
                                         }
                                     }

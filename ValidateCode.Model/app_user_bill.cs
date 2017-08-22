@@ -10,6 +10,8 @@ namespace ValidateCode.Model
     {
 
         public int app_user_id { get; set; }
+        [NotMapped]
+        public string app_user_name { get; set; }
 
         public TranType tran_type { get; set; }
 

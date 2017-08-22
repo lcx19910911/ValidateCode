@@ -8,7 +8,7 @@
                         名称：
                     </div>
                     <div class="am-u-md-5">
-                        <input type="text" name="name" class="am-input-sm" maxlength="50" placeholder="请输入名称">
+                        <input type="text" name="name" class="am-input-sm" maxlength="50" placeholder="请输入名称" readonly>
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"><strong class="am-text-danger am-text-sm">*</strong>必填，不能超过50个字符</div>
                 </div>
@@ -17,7 +17,7 @@
                         url地址：
                     </div>
                     <div class="am-u-md-5">
-                        <input type="text" name="url" class="am-input-sm" maxlength="126" placeholder="请输入url地址">
+                        <input type="text" name="url" class="am-input-sm" maxlength="126" placeholder="请输入url地址" readonly>
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"><strong class="am-text-danger am-text-sm">*</strong>必填，不能超过126个字符</div>
                 </div>
@@ -27,7 +27,7 @@
                         申请说明:
                     </div>
                     <div class="am-u-md-5">
-                        <input type="text" name="inbox_filter_name" class="am-input-sm" maxlength="200" placeholder="请输入申请说明">
+                        <input type="text" name="description" class="am-input-sm" maxlength="200" placeholder="请输入申请说明" readonly>
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"></div>
                 </div>
@@ -36,7 +36,7 @@
                         接收短信过滤模块名称:
                     </div>
                     <div class="am-u-md-5">
-                        <input type="text" name="inbox_filter_name" class="am-input-sm" maxlength="50" placeholder="请输入申请说明">
+                        <input type="text" name="inbox_filter_name" class="am-input-sm" maxlength="50" placeholder="请输入接收短信过滤模块名称">
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"></div>
                 </div>
@@ -45,7 +45,7 @@
                         发送短信过滤模块名称:
                     </div>
                     <div class="am-u-md-5">
-                        <input type="text" name="send_filter_name" class="am-input-sm" maxlength="50" placeholder="请输入申请说明">
+                        <input type="text" name="send_filter_name" class="am-input-sm" maxlength="50" placeholder="请输入发送短信过滤模块名称">
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"></div>
                 </div>
@@ -127,12 +127,12 @@
 
                 <div class="am-g am-margin-top">
                     <div class="am-u-md-3 am-text-right">
-                        审核状态:
+                        是否可用:
                     </div>
                     <div class="am-u-md-5">
-                        <select name="statu" data-am-selected="{btnSize: 'sm'}">
-                            <option value="0">否</option>
-                            <option value="1">是</option>
+                        <select name="project_state" data-am-selected="{btnSize: 'sm'}">
+                            <option value="1200">可用</option>
+                            <option value="1201">禁用</option>
                         </select>
                     </div>
                     <div class="am-hide-sm-only am-u-md-4 am-text-left"></div>

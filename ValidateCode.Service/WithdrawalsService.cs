@@ -74,21 +74,18 @@ namespace ValidateCode.Service
                 }
 
 
-                list.ForEach(x =>
+                if (userId == 0)
                 {
-                    //returnList.Add(new Withdrawals()
-                    //{
-                    //    UserName = x.User.NickName,
-                    //    AuditUserName = x.AuditUser?.NickName,
-                    //    CreatedTime = x.CreatedTime,
-                    //    Count = x.Count,
-                    //    ID = x.ID,
-                    //    VoucherImg = x.VoucherImg,
-                    //    VoucherNo = x.VoucherNo,
-                    //    StateStr=x.State.GetDescription(),
-                    //    State=x.State
-                    //});
-                });
+                    var userIdList = list.Select(x => x.app_user_id).ToList();
+                    var userDic = db.app_user.Where(x => userIdList.Contains(x.id) && x.statu == EntityStatu.normal).ToDictionary(x => x.id);
+                    list.ForEach(x =>
+                    {
+                        if (x.app_user_id != 0 && userDic.ContainsKey(x.app_user_id))
+                        {
+                            x.app_user_name = userDic[x.app_user_id].username;
+                        }
+                    });
+                }
                 return CreatePageList(list, pageIndex, pageSize, count);
             }
         }
@@ -113,7 +110,6 @@ namespace ValidateCode.Service
             {
                 return Result(false,ErrorCode.had_audit);
             }
-            model.audit_time = DateTime.Now;
             if (state == AuditState.success)
             {
                 model.type = type.Value;
@@ -124,10 +120,15 @@ namespace ValidateCode.Service
                 {
                     return Result(false, ErrorCode.sys_param_format_error);
                 }
+
+                model.before_funds = user.invite_funds;
+                model.after_funds = user.invite_funds - model.amount;
                 user.invite_funds -= model.amount;
+                userService.Update(user);
             }
             
             model.audit_state = state;
+            model.audit_time = DateTime.Now;
             int result = Update(model);
             if (result > 0)
             {

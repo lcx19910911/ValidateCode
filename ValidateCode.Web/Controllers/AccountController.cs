@@ -14,6 +14,7 @@ using ValidateCode.Core.Extensions;
 using ValidateCode.Core.Web;
 using ValidateCode.Core.Model;
 using ValidateCode.Model;
+using ValidateCode.Core.Code;
 
 namespace ValidateCode.Web.Controllers
 {
@@ -133,7 +134,9 @@ namespace ValidateCode.Web.Controllers
             var result = IUserService.Login(account, password,code);
             if (result.Success)
             {
-                LoginHelper.CreateUser(new LoginUser(result.Result.id,result.Result.username,false));
+                if(result.Result==null)
+                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "账号密码错误" });
+                LoginHelper.CreateUser(new LoginUser(result.Result.id,result.Result.username,false), Params.UserCookieName);
             }
             return JResult(result);
 
@@ -151,7 +154,9 @@ namespace ValidateCode.Web.Controllers
             var result = IAdminUserService.Login(account, password, code);
             if (result.Success)
             {
-                LoginHelper.CreateUser(new LoginUser(result.Result.id, result.Result.account, true));
+                if (result.Result == null)
+                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "账号密码错误" });
+                LoginHelper.CreateUser(new LoginUser(result.Result.id, result.Result.account, true), Params.AdminCookieName);
             }
             return JResult(result);
 
@@ -166,6 +171,27 @@ namespace ValidateCode.Web.Controllers
         {
             this.LoginUser = null;
             return View("Login");
+        }
+
+
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AdminQuit()
+        {
+            this.LoginUser = null;
+            return View("AdminLogin");
+        }
+
+
+        public ActionResult ChangePassword(string pasword, string new_password, string confirm_password)
+        {
+            return JResult(IUserService.ChangePassword(pasword, new_password, confirm_password,this.LoginUser.ID));
+        }
+        public ActionResult ChangeAdminPassword(string pasword, string new_password, string confirm_password)
+        {
+            return JResult(IAdminUserService.ChangePassword(pasword, new_password, confirm_password, this.LoginAdmin.ID));
         }
     }
 }

@@ -31,10 +31,12 @@
         <thead>
             <tr>
                 <th dataname="ID" type="checkbox"></th>
+                <th dataname="app_user_name">充值者</th>
                 <th dataname="amount">金额</th>
+                <th dataname="before_funds">充值前金额</th>
+                <th dataname="after_funds">充值后金额</th>
                 <th render="showPayType">方式</th>
                 <th render="showBillState">状态</th>
-                <th dataname="audit_time" datatype="jsondate">审核日期</th>
                 <th dataname="create_time" datatype="jsondate">创建日期</th>
                 <th type="eventlist"></th>
             </tr>
@@ -60,7 +62,7 @@
                 subId: "btnSearch"
             },
             isForPhone: true,
-            ajaxUrl: "/Recharge/GetPageList",
+            ajaxUrl: "/Admin/Recharge/GetPageList",
             //数据请求地址
             pageSize: 10,
             events: [

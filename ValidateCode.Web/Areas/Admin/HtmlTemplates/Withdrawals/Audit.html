@@ -1,0 +1,44 @@
+﻿<form id="form" class="am-form am-form-horizontal">
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">金额</label>
+        <div class="am-u-sm-9">
+            <input type="number" name="amount"  min="0" readonly/>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">提现前余额</label>
+        <div class="am-u-sm-9">
+            <input type="number" name="before_funds" min="0" readonly/>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">提现后余额</label>
+        <div class="am-u-sm-9">
+            <input type="number" name="after_funds" min="0" readonly/>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">金额</label>
+        <div class="am-u-sm-9">
+            <select name="type" data-am-selected="{btnSize: 'sm'}">
+                <option value="1">支付宝</option>
+                <option value="2">微信支付</option>
+            </select>  
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">第三方订单</label>
+        <div class="am-u-sm-9">
+            <input type="text" name="third_order_id"  maxlength="32" />
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label class="am-u-sm-3 am-form-label">审核</label>
+        <div class="am-u-sm-9">
+            <select name="audit_state" data-am-selected="{btnSize: 'sm'}">
+                <option value="1">转账</option>
+                <option value="2">驳回</option>
+            </select>
+        </div>
+    </div>
+</form>

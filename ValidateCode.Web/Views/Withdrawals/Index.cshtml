@@ -86,8 +86,8 @@
                     label: "保存",
                     callback: function (e) {
                         var amount = $("#form [name='amount']").val();
-                        $.Nuoya.action("/Withdrawals/add", { amount: amount }, function () {
-                            if (!data.ErrorDesc) {
+                        $.Nuoya.ajaxGet("/Withdrawals/add", { amount: amount }, function (data) {
+                            if (data.Code==0) {
                                 e.hide();
                                 grid.reload();
                             }

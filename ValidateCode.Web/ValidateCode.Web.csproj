@@ -180,6 +180,7 @@
     <Content Include="Areas\Admin\HtmlTemplates\Recharge\Add.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\ChangePassword.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\Update.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Audit.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Add.html" />
     <Content Include="Global.asax" />
     <Content Include="Images\1.png" />

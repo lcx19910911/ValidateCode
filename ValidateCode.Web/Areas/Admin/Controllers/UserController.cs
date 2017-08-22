@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ValidateCode.Core.Code;
+using ValidateCode.Core.Model;
 using ValidateCode.IService;
 using ValidateCode.Model;
 using ValidateCode.Web.Filters;
@@ -16,10 +18,13 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
     public class UserController : BaseAdminController
     {
         public IAppUserService IAppUserService;
+        public IRechargeService IRechargeService;
 
-        public UserController(IAppUserService _IUserService)
+
+        public UserController(IAppUserService _IUserService, IRechargeService _IRechargeService)
         {
             this.IAppUserService = _IUserService;
+            this.IRechargeService = _IRechargeService;
         }
         // GET: 
         public ActionResult Index()
@@ -57,6 +62,36 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         public ActionResult Find(int id)
         {
             return JResult(IAppUserService.Find(id));
+        }
+        [HttpPost]
+        public ActionResult Recharge(int app_user_id, decimal amount, PayType type,string third_order_id)
+        {
+            var user = IAppUserService.Find(app_user_id);
+            if (user != null)
+            {
+                var model = new app_user_bill()
+                {
+                    app_user_id = app_user_id,
+                    amount = amount,
+                    type = type,
+                    tran_type = TranType.recharge,
+                    audit_state = AuditState.success,
+                    audit_time = DateTime.Now,
+                    create_time = DateTime.Now,
+                    order_info = $"{user.username}充值{amount}",
+                    before_funds = user.funds,
+                    after_funds = user.funds + amount,
+                    third_order_id = third_order_id,
+                };
+                user.funds += amount;
+                IAppUserService.Update(user);
+                var result = IRechargeService.Add(model);
+                return JResult(result);
+            }
+            else
+            {
+                return JResult(new WebResult<bool> { Code = ErrorCode.sys_param_format_error, Result = false, Append = "参数错误" });
+            }
         }
 
         [HttpPost]

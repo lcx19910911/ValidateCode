@@ -16,9 +16,9 @@ namespace ValidateCode.Core
     {
        
 
-        public static void CreateUser(LoginUser user)
+        public static void CreateUser(LoginUser user,string cookieName)
         {
-            HttpCookie cookie = new HttpCookie(Params.UserCookieName);
+            HttpCookie cookie = new HttpCookie(cookieName);
             cookie.Value = CryptoHelper.AES_Encrypt(user.ToJson(), Params.SecretKey);
             cookie.Expires = DateTime.Now.AddYears(1);
             // 写登录Cookie
@@ -27,9 +27,10 @@ namespace ValidateCode.Core
         }
 
 
-        public static void ClearUser()
+
+        public static void ClearUser(string cookieName)
         {
-            HttpCookie cookie = HttpContext.Current.Request.Cookies[Params.UserCookieName];
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[cookieName];
             if (cookie != null)
             {
                 cookie.Expires = DateTime.Now.AddHours(-1);
@@ -52,6 +53,18 @@ namespace ValidateCode.Core
             return user;
         }
 
+        /// <summary>
+        /// 获取当前用户
+        /// </summary>
+        /// <returns></returns>
+        public static LoginUser GetCurrentAdmin()
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[Params.AdminCookieName];
+            if (cookie == null)
+                return null;
+            var user = (CryptoHelper.AES_Decrypt(cookie.Value, Params.SecretKey)).DeserializeJson<LoginUser>();
+            return user;
+        }
 
 
         /// <summary>

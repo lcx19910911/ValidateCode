@@ -38,6 +38,7 @@ namespace ValidateCode.Service
             {
                 model.create_time = DateTime.Now;
                 model.sort_index = 0;
+                model.project_state = ProjectState.disable;
                 int id=Add(model);
                 if (id > 0)
                 {
@@ -50,7 +51,18 @@ namespace ValidateCode.Service
             }
             else
             {
-                int result=Update(model);
+                project.project_state = model.project_state;
+                project.send_filter_name = model.send_filter_name;
+                project.inbox_filter_name = model.inbox_filter_name;
+                project.price = model.price;
+                project.price_discount = model.price_discount;
+                project.sort_index = model.sort_index;
+                project.divide_type = model.divide_type;
+                project.divide_fixed_amount = model.divide_fixed_amount;
+                project.divide_ratio_value = model.divide_ratio_value;
+                project.stock_sum = model.stock_sum;
+                project.country_code = model.country_code;
+                int result=Update(project);
                 if (result > 0)
                 {
                     return Result(true);
@@ -78,9 +90,9 @@ namespace ValidateCode.Service
                 {
                     query = query.Where(x => x.name.Contains(name));
                 }
-                if (isAll)
+                if (!isAll)
                 {
-
+                    query = query.Where(x => x.project_state==ProjectState.enable);
                 }
                 var count = query.Count();
                 var list = query.OrderByDescending(x => x.sort_index).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();

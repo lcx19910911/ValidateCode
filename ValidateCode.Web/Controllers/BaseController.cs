@@ -219,6 +219,30 @@ namespace ValidateCode.Web.Controllers
             return RedirectToAction("Index", "Login");
         }
 
+        private LoginUser _loginAdmin = null;
+
+        public LoginUser LoginAdmin
+        {
+            get
+            {
+                if (_loginAdmin == null)
+                {
+                    var cookie = this.Request.Cookies[Params.AdminCookieName];
+                    if (cookie != null)
+                        return CryptoHelper.AES_Decrypt(this.Request.Cookies[Params.AdminCookieName].Value, Params.SecretKey).DeserializeJson<LoginUser>();
+                    else
+                        return null;
+                }
+                else
+                {
+                    return _loginAdmin;
+                }
+            }
+            set
+            {
+                LoginHelper.CreateUser(value, Params.AdminCookieName);
+            }
+        }
 
         private LoginUser _loginUser = null;
 
@@ -241,7 +265,7 @@ namespace ValidateCode.Web.Controllers
             }
             set
             {
-                LoginHelper.CreateUser(value);
+                LoginHelper.CreateUser(value, Params.UserCookieName);
             }
         }       
     }
