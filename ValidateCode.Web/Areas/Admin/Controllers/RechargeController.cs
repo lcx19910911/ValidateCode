@@ -64,6 +64,8 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
             ModelState.Remove("create_time");
             ModelState.Remove("audit_state");
             ModelState.Remove("order_info");
+            ModelState.Remove("invite_funds");
+            ModelState.Remove("funds");
             if (ModelState.IsValid)
             {
                 model.tran_type = TranType.recharge;

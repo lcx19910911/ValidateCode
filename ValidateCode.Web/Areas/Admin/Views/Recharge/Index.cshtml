@@ -32,8 +32,8 @@
             <tr>
                 <th dataname="ID" type="checkbox"></th>
                 <th dataname="amount">金额</th>
-                <th render="showType">方式</th>
-                <th render="showState">状态</th>
+                <th render="showPayType">方式</th>
+                <th render="showBillState">状态</th>
                 <th dataname="audit_time" datatype="jsondate">审核日期</th>
                 <th dataname="create_time" datatype="jsondate">创建日期</th>
                 <th type="eventlist"></th>
@@ -51,31 +51,6 @@
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
-        function showState(item)
-        {
-            switch (item.order_state)
-            {
-                case "1":
-                    return "等待支付";
-                    break;
-                case "2":
-                    return "支付成功";
-                    break;
-            }
-        }
-        function showType(item) {
-            switch (item.type) {
-                case "0":
-                    return "人工";
-                    break;
-                case "1":
-                    return "支付宝";
-                    break;
-                case "2":
-                    return "微信";
-                    break;
-            }
-        }
 
         var grid = $.Nuoya.grid({
             tableId: "dataTable",

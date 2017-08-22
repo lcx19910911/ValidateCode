@@ -82,10 +82,10 @@ namespace ValidateCode.Model
 
 
         [Column(TypeName = "numeric")]
-        public decimal? invite_funds { get; set; }
+        public decimal invite_funds { get; set; } = 0;
 
 
         [Column(TypeName = "numeric")]
-        public decimal? funds { get; set; }
+        public decimal funds { get; set; } = 0;
     }
 }

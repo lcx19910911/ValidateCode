@@ -110,6 +110,44 @@
             function CloseLoading() {
                 $("#loadingDiv").hide();
             }
+
+            function showBillState(item) {
+                switch (item.audit_state) {
+                    case 1:
+                        return "成功";
+                        break;
+                    case 2:
+                        return "失败";
+                        break;
+                }
+            }
+
+            function showAuditState(item) {
+                switch (item.audit_state) {
+                    case 0:
+                        return "待审核";
+                        break;
+                    case 1:
+                        return "成功";
+                        break;
+                    case 2:
+                        return "驳回";
+                        break;
+                }
+            }
+            function showPayType(item) {
+                switch (item.type) {
+                    case 0:
+                        return "人工";
+                        break;
+                    case 1:
+                        return "支付宝";
+                        break;
+                    case 2:
+                        return "微信";
+                        break;
+                }
+            }
     </script>
 
 
