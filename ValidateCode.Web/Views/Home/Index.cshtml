@@ -55,6 +55,11 @@
                 </div>
                 <div class="am-cf am-padding am-padding-bottom-sm">
                     <div class="am-fl am-cf">
+                        <strong class="am-text-primary am-text-lg">推广链接</strong> :<span class="am-text-danger am-text-lg">@(CustomHelper.GetValue("Company_SiteUrl")+"/Account/Register?invite_code="+Model.invite_code)</span>
+                    </div>
+                </div>
+                <div class="am-cf am-padding am-padding-bottom-sm">
+                    <div class="am-fl am-cf">
                         <strong class="am-text-primary am-text-lg">注册时间</strong> :<span class="am-text-danger am-text-lg">@(Model.reg_time.ToString("yyyy年MM月dd日"))</span>
                     </div>
                 </div>
