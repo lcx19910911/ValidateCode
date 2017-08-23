@@ -56,7 +56,7 @@ namespace ValidateCode.Service
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public WebResult<bool> Manager(app_user model, string code, bool isAdmin)
+        public WebResult<bool> Manager(app_user model, string code, bool isAdmin,string invite_user_code)
         {
             if (!isAdmin)
             {
@@ -85,11 +85,11 @@ namespace ValidateCode.Service
                     }
                 }
                 //检查邀请码
-                if (!IsExits(x => x.invite_code == model.invite_code))
+                if (!IsExits(x => x.invite_code == invite_user_code))
                 {
                     return Result(false, ErrorCode.sys_param_format_error);
                 }
-                var inviteUser = Find(x => x.invite_code == model.invite_code && x.statu == EntityStatu.normal);
+                var inviteUser = Find(x => x.invite_code == invite_user_code && x.statu == EntityStatu.normal);
                 if (inviteUser == null)
                 {
                     return Result(false, ErrorCode.invite_code_error);

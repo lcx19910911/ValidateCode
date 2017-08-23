@@ -42,6 +42,16 @@ namespace ValidateCode.Web
                         type = Model.AdminType.super,
                         password = CryptoHelper.MD5_Encrypt("123456")
                     });
+                    dbcontext.app_user.Add(new app_user()
+                    {
+                        username = "test",
+                        email = "10136",
+                        alipay_name="12",
+                        alipay_acc="2323",
+                        invite_code="123456",
+                        reg_time=DateTime.Now,
+                        pasword = "123456"
+                    });
                     dbcontext.SaveChanges();
                 }
             }

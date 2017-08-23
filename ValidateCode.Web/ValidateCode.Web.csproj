@@ -294,6 +294,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InviteBillController.cs" />
+    <Compile Include="Controllers\SMSInboxController.cs" />
+    <Compile Include="Controllers\SMSSendController.cs" />
     <Compile Include="Controllers\WithdrawalsController.cs" />
     <Compile Include="Controllers\RechargeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -340,6 +342,7 @@
     <Content Include="Views\InviteBill\Index.cshtml" />
     <Content Include="Views\SMSInbox\Index.cshtml" />
     <Content Include="Views\SMSSend\Index.cshtml" />
+    <Content Include="Views\Home\GetCode.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

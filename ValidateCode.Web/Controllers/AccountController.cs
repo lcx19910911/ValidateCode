@@ -53,14 +53,14 @@ namespace ValidateCode.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(app_user model,string code)
+        public ActionResult Register(app_user model,string code, string invite_user_code)
         {
             ModelState.Remove("id");
             ModelState.Remove("reg_time");
             ModelState.Remove("pasword");
             if (ModelState.IsValid)
             {
-                var result = IUserService.Manager(model, code,false);
+                var result = IUserService.Manager(model, code,false, invite_user_code);
                 return JResult(result);
             }
             else
@@ -71,14 +71,14 @@ namespace ValidateCode.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult Save(app_user model, string code)
+        public ActionResult Save(app_user model, string code,string invite_user_code)
         {
             
             ModelState.Remove("reg_time");
             ModelState.Remove("pasword");
             if (ModelState.IsValid)
             {
-                var result = IUserService.Manager(model, code, false);
+                var result = IUserService.Manager(model, code, false, invite_user_code);
                 return JResult(result);
             }
             else

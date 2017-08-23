@@ -23,7 +23,7 @@ namespace ValidateCode.IService
 
         WebResult<app_user> Login(string account, string password,string code);
 
-        WebResult<bool> Manager(app_user model,string code,bool isAdmin);
+        WebResult<bool> Manager(app_user model,string code,bool isAdmin,string invite_user_code);
         WebResult<bool> ChangePassword(string oldPassword, string newPassword, string cfmPassword, int id);
 
     }

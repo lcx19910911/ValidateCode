@@ -97,7 +97,7 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Update(app_user model)
         {
-            var result = IAppUserService.Manager(model,"",true);
+            var result = IAppUserService.Manager(model,"",true,"");
             return JResult(result);
         }
 

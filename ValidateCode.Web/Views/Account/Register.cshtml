@@ -76,12 +76,12 @@
                 {
                     if (code.IsNotNullOrEmpty() && code.Length == 6)
                     {
-                    <input  type="hidden" name="invite_code" value="@(code)"/>
+                    <input  type="hidden" name="invite_user_code" value="@(code)"/>
                     }
                     else
                     {
                     <li>
-                        <lable class="info">邀请码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="number"  name="invite_code" maxlength="6" value="@(Model.invite_code)" />
+                        <lable class="info">邀请码:<strong class="am-text-danger am-text-sm">*</strong></lable><input type="number"  name="invite_user_code" maxlength="6" value="@(Model.invite_code)" />
                         <div class="clear"> </div>
                     </li>
                     }

@@ -23,5 +23,10 @@ namespace ValidateCode.Web.Controllers
             var user = IAppUserService.Find(this.LoginUser.ID);
             return View(user);
         }
+
+        public ActionResult GetCode()
+        {
+            return View();
+        }
     }
 }
