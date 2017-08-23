@@ -46,6 +46,8 @@ namespace ValidateCode.Web
                     {
                         username = "test",
                         email = "10136",
+                        qq="1123",
+                        phone="12244",
                         alipay_name="12",
                         alipay_acc="2323",
                         invite_code="123456",

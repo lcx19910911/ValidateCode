@@ -159,10 +159,13 @@ namespace ValidateCode.Service
                 }
                 var count = query.Count();
                 var list = query.OrderByDescending(x => x.reg_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                var userIdList = list.Select(x => x.invite_user_id).ToList();
+                var userDic = db.app_user.Where(x => userIdList.Contains(x.id) && x.statu == EntityStatu.normal).ToDictionary(x => x.id);
                 list.ForEach(x =>
                 {
-                    if (x != null)
+                    if (x .invite_user_id.HasValue&&userDic.ContainsKey(x.invite_user_id.Value))
                     {
+                        x.invite_user_name = userDic[x.invite_user_id.Value].username;
                     }
                 });
 
