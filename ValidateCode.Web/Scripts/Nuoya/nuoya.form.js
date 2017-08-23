@@ -19,11 +19,11 @@
                                 //debugger
                                 if ($(element).parents(".am-form-horizontal").length==0) {
                                     var left = $(element).offset().left + $(element).data("plugin_tipso").tipso_bubble.width();
-                                    $(element).data("plugin_tipso").tipso_bubble.css("left", left + "px");
+                                    $(element).data("plugin_tipso").tipso_bubble.css("left", 2*left + "px");
                                 }
                                 else {
                                     var left =  $(element).data("plugin_tipso").tipso_bubble.width()*4;
-                                    $(element).data("plugin_tipso").tipso_bubble.css("left", left + "px");
+                                    $(element).data("plugin_tipso").tipso_bubble.css("left", 2 * left + "px");
                                 }
                             },
                             onHide: function () {

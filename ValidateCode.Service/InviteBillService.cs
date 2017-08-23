@@ -142,9 +142,6 @@ namespace ValidateCode.Service
                     amount = model.amount,
                     after_funds = user.invite_funds + model.amount,
                     app_user_id = model.app_user_id,
-                    audit_state = AuditState.success,
-                    audit_time = DateTime.Now,
-                    type = PayType.people,
                     create_time = DateTime.Now,
                     order_info = $"{user.username}获得推广提成{model.amount}",
 

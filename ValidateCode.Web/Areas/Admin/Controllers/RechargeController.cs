@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ValidateCode.Core.Code;
 using ValidateCode.Core.Model;
+using ValidateCode.DB;
 using ValidateCode.IService;
 using ValidateCode.Model;
 using ValidateCode.Web.Filters;
@@ -53,41 +54,6 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         {
             return JResult(IRechargeService.Find(id));
         }
-
-        /// <summary>
-        /// 查找
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Add(app_user_bill model)
-        {
-            ModelState.Remove("id");
-            ModelState.Remove("create_time");
-            ModelState.Remove("audit_state");
-            ModelState.Remove("order_info");
-            ModelState.Remove("invite_funds");
-            ModelState.Remove("funds");
-            if (ModelState.IsValid)
-            {
-                model.tran_type = TranType.recharge;
-                model.audit_state = AuditState.success;
-                model.audit_time = DateTime.Now;
-                model.create_time = DateTime.Now;
-                var user = IAppUserService.Find(model.app_user_id);
-                if (user != null)
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
-                model.before_funds = user.funds;
-                model.after_funds = user.funds + model.amount;
-                model.order_info = $"给用户{user.username},充值金额{model.amount}";
-                var result = IRechargeService.Add(model);
-                if (result > 0)
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = true });
-                else
-                    return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "操作失败" });
-            }
-            else
-            {
-                return ParamsErrorJResult(ModelState);
-            }
-        }
+        
     }
 }

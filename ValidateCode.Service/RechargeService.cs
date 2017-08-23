@@ -19,17 +19,17 @@ namespace ValidateCode.Service
     /// <summary>
     /// 用户充值记录
     /// </summary>
-    public class RechargeService : BaseService<app_user_bill>, IRechargeService
+    public class RechargeService : BaseService<recharge>, IRechargeService
     {
-        public PageList<app_user_bill> GetPageList(int pageIndex, int pageSize, string name,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0)
+        public PageList<recharge> GetPageList(int pageIndex, int pageSize, string name, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId = 0)
         {
             using (DbRepository db = new DbRepository())
             {
-                var list = new List<app_user_bill>();
+                var list = new List<recharge>();
                 var count = 0;
                 if (userId!=0)
                 {
-                    var query = db.app_user_bill.Where(x => x.tran_type == TranType.recharge && x.statu == EntityStatu.normal && x.app_user_id == userId);
+                    var query = db.recharge.Where(x => x.statu == EntityStatu.normal && x.app_user_id == userId);
                     if (createdTimeStart != null)
                         {
                             query = query.Where(x => x.create_time >= createdTimeStart);
@@ -44,7 +44,7 @@ namespace ValidateCode.Service
                 }
                 else
                 {
-                    var query = db.app_user_bill.Where(x => x.tran_type == TranType.recharge && x.statu == EntityStatu.normal);
+                    var query = db.recharge.Where(x => x.statu == EntityStatu.normal);
                     if (name.IsNotNullOrEmpty())
                     {
                         var userIdList = db.app_user.Where(x => x.statu == EntityStatu.normal && x.username.Contains(name)).Select(x => x.id).ToList();
@@ -81,40 +81,5 @@ namespace ValidateCode.Service
             }
          }
 
-        /// <summary>
-        /// 审核
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public WebResult<bool> HadPay(int id,string orderId,PayType type)
-        {
-            if (id <= 0||orderId.IsNullOrEmpty())
-            {
-                return Result(false, ErrorCode.sys_param_format_error);
-            }
-            var model = Find(id);
-            if (model == null)
-            {
-                return Result(false, Core.Code.ErrorCode.sys_param_format_error);
-            }
-            if (model.audit_state == AuditState.success)
-            {
-                return Result(false, Core.Code.ErrorCode.had_audit);
-            }
-
-            model.third_order_id = orderId;
-            model.type = type;
-            model.audit_state = AuditState.success;
-
-            int result = Update(model);
-            if (result > 0)
-            {
-                return Result(true);
-            }
-            else
-            {
-                return Result(false, ErrorCode.sys_fail);
-            }
-        }
     }
 }

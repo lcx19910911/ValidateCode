@@ -31,15 +31,7 @@ namespace ValidateCode.Model
         public decimal? after_funds { get; set; }
 
         public DateTime create_time { get; set; }
-
-        [StringLength(32)]
-        public string third_order_id { get; set; }
-
-        public AuditState audit_state { get; set; } = AuditState.success;
-
-        public DateTime? audit_time { get; set; }
-
-        public PayType? type { get; set; } = PayType.people;
+         
 
     }
 
@@ -63,22 +55,5 @@ namespace ValidateCode.Model
         invate=7,
 
     }
-
-    public enum PayType
-    {
-        people=0,
-
-        alipay=1,
-
-        wechat=2,
-    }
-
-    public enum AuditState
-    {
-        wait=0,
-
-        success=1,
-
-        reject=2,
-    }
+    
 }

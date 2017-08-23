@@ -117,9 +117,9 @@ namespace ValidateCode.Service
                 user.qq = model.qq;
                 user.phone = model.phone;
                 user.email = model.email;
-                if (model.vip_level != 0)
+                if (model.vip_level.HasValue)
                 {
-                    user.vip_level = model.vip_level;
+                    user.vip_level = model.vip_level.Value;
                 }
                 int result=Update(user);
                 if (result > 0)

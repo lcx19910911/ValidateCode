@@ -42,6 +42,14 @@ namespace ValidateCode.Web.Controllers
             return View();
         }
 
+        public ActionResult Update(int id = 0)
+        {
+            var model = IUserService.Find(id);
+            if (model == null)
+                return View(new app_user());
+            else
+                return View(model);
+        }
 
         public ActionResult Register(int id=0)
         {
@@ -76,6 +84,7 @@ namespace ValidateCode.Web.Controllers
             
             ModelState.Remove("reg_time");
             ModelState.Remove("pasword");
+            ModelState.Remove("username");
             if (ModelState.IsValid)
             {
                 var result = IUserService.Manager(model, code, false, invite_user_code);

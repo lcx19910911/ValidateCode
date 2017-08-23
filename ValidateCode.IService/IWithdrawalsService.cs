@@ -10,7 +10,7 @@ using ValidateCode.Model;
 
 namespace ValidateCode.IService
 {
-    public interface IWithdrawalsService : IBaseService<app_user_bill>
+    public interface IWithdrawalsService : IBaseService<withdrawals>
     {
 
         //                           提现记录
@@ -21,8 +21,9 @@ namespace ValidateCode.IService
         /// <param name="pageSize">分页大小</param>
         /// <param name="title">标题 - 搜索项</param>
         /// <returns></returns>
-        PageList<app_user_bill> GetPageList(int pageIndex, int pageSize, string name,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0);
+        PageList<withdrawals> GetPageList(int pageIndex, int pageSize, string name, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId = 0);
 
         WebResult<bool> Audit(int id, AuditState state, PayType? type, string orderId);
+
     }
 }

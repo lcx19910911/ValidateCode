@@ -17,47 +17,44 @@ using ValidateCode.Service;
 
 namespace ValidateCode.Service
 {
+   
     /// <summary>
     /// 用户提现
     /// </summary>
-    public class WithdrawalsService : BaseService<app_user_bill>, IWithdrawalsService
+    public class WithdrawalsService : BaseService<withdrawals>, IWithdrawalsService
     {
-
         private AppUserService userService;
-
-
-        public PageList<app_user_bill> GetPageList(int pageIndex, int pageSize,string name,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
+        public PageList<withdrawals> GetPageList(int pageIndex, int pageSize, string name, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId = 0)
         {
             using (DbRepository db = new DbRepository())
             {
-                var list = new List<app_user_bill>();
-                var returnList = new List<app_user_bill>();
+                var list = new List<withdrawals>();
                 var count = 0;
-                if (userId!=0)
+                if (userId != 0)
                 {
-                    
-                        var query =db.app_user_bill.Where(x=>x.tran_type==TranType.withdrawls&&x.statu==EntityStatu.normal&&x.app_user_id==userId);
-                        if (createdTimeStart != null)
-                        {
-                            query = query.Where(x => x.create_time >= createdTimeStart);
-                        }
-                        if (createdTimeEnd != null)
-                        {
-                            createdTimeEnd = createdTimeEnd.Value.AddDays(1);
-                            query = query.Where(x => x.create_time < createdTimeEnd);
-                        }
-                        count = query.Count();
-                        list = query.OrderByDescending(x => x.create_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();             
+
+                    var query = db.withdrawals.Where(x => x.statu == EntityStatu.normal && x.app_user_id == userId);
+                    if (createdTimeStart != null)
+                    {
+                        query = query.Where(x => x.create_time >= createdTimeStart);
+                    }
+                    if (createdTimeEnd != null)
+                    {
+                        createdTimeEnd = createdTimeEnd.Value.AddDays(1);
+                        query = query.Where(x => x.create_time < createdTimeEnd);
+                    }
+                    count = query.Count();
+                    list = query.OrderByDescending(x => x.create_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
                 }
                 else
                 {
-                    var query = db.app_user_bill.Where(x=> x.tran_type == TranType.withdrawls && x.statu == EntityStatu.normal);
+                    var query = db.withdrawals.Where(x => x.statu == EntityStatu.normal);
                     if (name.IsNotNullOrEmpty())
                     {
                         var userIdList = db.app_user.Where(x => x.statu == EntityStatu.normal && x.username.Contains(name)).Select(x => x.id).ToList();
                         if (userIdList != null && userIdList.Count > 0)
                         {
-                            query = query.Where(x => userIdList.Contains(x.id));
+                            query = query.Where(x => userIdList.Contains(x.app_user_id));
                         }
                     }
                     if (createdTimeStart != null)
@@ -95,7 +92,7 @@ namespace ValidateCode.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public WebResult<bool> Audit(int id, AuditState state,PayType? type,string orderId)
+        public WebResult<bool> Audit(int id, AuditState state, PayType? type, string orderId)
         {
             if (id <= 0)
             {
@@ -108,35 +105,48 @@ namespace ValidateCode.Service
             }
             if (model.audit_state == AuditState.success)
             {
-                return Result(false,ErrorCode.had_audit);
+                return Result(false, ErrorCode.had_audit);
             }
             if (state == AuditState.success)
             {
                 model.type = type.Value;
                 model.third_order_id = orderId;
                 userService = new AppUserService();
+
                 var user = userService.Find(model.app_user_id);
                 if (user == null)
-                {
                     return Result(false, ErrorCode.sys_param_format_error);
-                }
+                if (user.invite_funds < model.amount)
+                    return Result(false, ErrorCode.invite_amount_error);
 
+                var bill = new app_user_bill();
+                bill.tran_type = TranType.withdrawls;
+                bill.tran_type_source = model.id;
+                bill.order_info = $"用户{user.username},申请提现金额{model.amount}";
+                bill.create_time = DateTime.Now;
+                bill.app_user_id = model.app_user_id;
+                bill.amount = model.amount;
+                //提现表修改
                 model.before_funds = user.invite_funds;
                 model.after_funds = user.invite_funds - model.amount;
                 user.invite_funds -= model.amount;
+                Update(model);
+                //用户修改
                 userService.Update(user);
-            }
-            
-            model.audit_state = state;
-            model.audit_time = DateTime.Now;
-            int result = Update(model);
-            if (result > 0)
-            {
+                using (DbRepository db = new DbRepository())
+                {
+                    db.app_user_bill.Add(bill);
+                    db.SaveChanges();
+                }
+
                 return Result(true);
             }
             else
             {
-                return Result(false, ErrorCode.sys_fail);
+                model.audit_state = state;
+                model.audit_time = DateTime.Now;
+                Update(model);
+                return Result(true);
             }
         }
     }

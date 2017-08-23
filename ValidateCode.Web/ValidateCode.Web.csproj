@@ -348,6 +348,7 @@
     <Content Include="NLog.config" />
     <Content Include="Areas\Admin\Views\InviteBill\Index.cshtml" />
     <None Include="Properties\PublishProfiles\codeconfig.pubxml" />
+    <Content Include="Views\Account\Update.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

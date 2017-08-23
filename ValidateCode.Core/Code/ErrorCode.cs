@@ -181,6 +181,14 @@ namespace ValidateCode.Core.Code
         [Description("邀请码错误.")]
         invite_code_error = 705,
 
+
+
+        /// <summary>
+        /// 提现金额超出用户提成总额
+        /// </summary>
+        [Description("邀请码错误.")]
+        invite_amount_error =706,
+
         #endregion
 
 
