@@ -28,7 +28,7 @@ ul {
 .admin-menu {
     position: fixed;
     z-index: 10;
-    bottom: 30px;
+    bottom: 300px;
     right: 20px;
 }
 
