@@ -86,7 +86,7 @@
                 data: { account: account, password: password ,code:code},
                 success: function (data) {
                     if (data.Code == 0) {
-                            window.location.href = "/Home/Index";
+                            window.location.href = "/Home/GetCode";
                     }
                     else {
                         alert(data.Append);
