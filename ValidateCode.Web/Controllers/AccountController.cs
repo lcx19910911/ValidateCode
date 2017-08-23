@@ -185,9 +185,9 @@ namespace ValidateCode.Web.Controllers
         }
 
 
-        public ActionResult ChangePassword(string pasword, string new_password, string confirm_password)
+        public ActionResult ChangePassword(string pasword, string new_password, string confirm_password,int id=0)
         {
-            return JResult(IUserService.ChangePassword(pasword, new_password, confirm_password,this.LoginUser.ID));
+            return JResult(IUserService.ChangePassword(pasword, new_password, confirm_password, id==0?this.LoginUser.ID:id));
         }
         public ActionResult ChangeAdminPassword(string pasword, string new_password, string confirm_password)
         {

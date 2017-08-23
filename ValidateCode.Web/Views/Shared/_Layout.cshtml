@@ -43,51 +43,31 @@
         }
     </style>
     <script>
-        function userInfo() {
-
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                addIframe: true,
-                width: (isForPhone ? (($(window).width() - 40) + "px") : "1200px"),
-                height: (isForPhone ? (($(window).height() - 300) + "px") : "780px"),
-                ajaxUrl: "/Account/Register?info=true&id=@(LoginHelper.GetCurrentUser()?.ID)",
-                title: "作者信息",
-                callback: function (e) {
-                    $(window.frames["alrtIframe"]).css("width", "90%");
-                    //iframeObj.find("#regForm .main").css("margin-top", "-300px");
-                    if (isForPhone) {
-                        $(".am-modal-alert").css({ "top": "30%" }, { "left": "10%" });
-                        $(".am-text-right").hide();
-                    }
-                }
-            });
-        }
         function changePassword() {
             $.Nuoya.ajaxDialog({
                 closeViaDimmer: false,
-                width: (isForPhone ? (($(window).width() - 40) + "px") : "800px"),
-                height: (isForPhone ? (($(window).height() - 300) + "px") : "280px"),
-                ajaxUrl: "/HtmlTemplates/Admin/ChangePassword.html",
+                width: ($(window).width() - 40) + "px",
+                height: ($(window).height() - 400) + "px",
+                ajaxUrl: "/Areas/Admin/HtmlTemplates/User/ChangePassword.html",
                 title: "修改密码",
                 callback: function (e) {
                         $(".am-modal-alert").css({ "top": "35%" }, { "left": "10%" });
                         $(".am-text-right").hide();
                 },
-                isForPhone: isForPhone,
                 buttons: [{
                     label: "保存",
                     callback: function (e) {
 
-                        var oldPassword = $("[name='OldPassword']").val();
-                        var newPassword = $("[name='NewPassword']").val();
-                        var cfmPassword = $("[name='ConfirmPassword']").val();
+                        var oldPassword = $("[name='pasword']").val();
+                        var newPassword = $("[name='new_password']").val();
+                        var cfmPassword = $("[name='confirm_password']").val();
 
                         if (oldPassword != "" && newPassword != "" && cfmPassword != "") {
                             if (newPassword != cfmPassword) {
                                 $.Nuoya.alert("密码不能为空");
                                 return false;
                             }
-                            $.Nuoya.action("/account/ChangePassword", { oldPassword: oldPassword, newPassword: newPassword, cfmPassword: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)'  }, function (data) {
+                            $.Nuoya.action("/account/ChangePassword", { pasword: oldPassword, new_password: newPassword, confirm_password: cfmPassword, id: '@(LoginHelper.GetCurrentUser()?.ID)' }, function (data) {
                                 if (!data.ErrorDesc) {
                                     $.Nuoya.alert("修改密码成功");
                                     e.hide();

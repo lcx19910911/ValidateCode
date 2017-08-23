@@ -192,12 +192,6 @@ namespace ValidateCode.Service
             var user = Find(id);
             if (user == null)
                 return Result(false, ErrorCode.user_not_exit);
-            if (oldPassword == "")
-            {
-                oldPassword = CryptoHelper.MD5_Encrypt(oldPassword);
-                if (!user.pasword.Equals(oldPassword))
-                    return Result(false, ErrorCode.user_password_nottrue);
-            }
             user.pasword = newPassword;
             Update(user);
             return Result(true);
