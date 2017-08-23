@@ -71,6 +71,6 @@ namespace ValidateCode.Model
         public decimal? price_discount { get; set; }
 
 
-        public ProjectState invite_state { get; set; }
+        public AuditState invite_state { get; set; }
     }
 }

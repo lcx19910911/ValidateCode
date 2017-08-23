@@ -180,6 +180,7 @@
     <Content Include="Areas\Admin\HtmlTemplates\Recharge\Add.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\ChangePassword.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\Update.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\InviteBill\Audit.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Audit.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Add.html" />
     <Content Include="Global.asax" />
@@ -286,6 +287,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InviteBillController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProjectController.cs" />
     <Compile Include="Areas\Admin\Controllers\RechargeController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
@@ -343,6 +345,9 @@
     <Content Include="Views\SMSInbox\Index.cshtml" />
     <Content Include="Views\SMSSend\Index.cshtml" />
     <Content Include="Views\Home\GetCode.cshtml" />
+    <Content Include="NLog.config" />
+    <Content Include="Areas\Admin\Views\InviteBill\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\codeconfig.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

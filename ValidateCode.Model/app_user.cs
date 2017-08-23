@@ -57,9 +57,15 @@ namespace ValidateCode.Model
         [NotMapped]
         public string invite_user_name { get; set; }
 
+        /// <summary>
+        /// 获得推广
+        /// </summary>
         [Column(TypeName = "numeric")]
         public decimal? invite_profit { get; set; }
 
+        /// <summary>
+        /// 贡献上级
+        /// </summary>
         [Column(TypeName = "numeric")]
         public decimal? invite_offer { get; set; }
 

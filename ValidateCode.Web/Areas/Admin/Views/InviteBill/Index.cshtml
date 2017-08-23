@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "下线提成";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>下线提成</small></div>
+</div>
+<div id="searchDomain">
+
+    <div class="am-g">
+        <div class="am-u-lg-12">
+            <div class="am-input-group am-input-group-sm">
+                <span class="am-input-group-label ">项目名称</span>
+                <input type="text" class="am-form-field" placeholder="按项目名称搜索" name="name" ;>
+                <span class="am-input-group-label  am-margin-left-sm">提现日期</span>
+                <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeStart" readonly style="width:auto;">
+                <span class="am-input-group-label"> - </span>
+                <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeEnd" readonly style="width:auto;">
+                <span class="am-input-group-btn am-margin-left-sm">
+                    <button class="am-btn am-btn-default" id="btnSearch" type="button">搜索</button>
+                    <button class="am-btn am-btn-default" onclick="ClearFilter()" type="button">清除</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid_container">
+    <table id="dataTable" class="am-table am-table-striped am-table-hover table-main">
+        <thead>
+            <tr>
+                <th dataname="id" type="checkbox"></th>
+                <th dataname="project_name">项目</th>
+                <th dataname="project_name">项目</th>
+                <th dataname="amount">提成</th>
+                <th dataname="price">价格</th>
+                <th dataname="price_discount">折扣价</th>
+                <th render="showState">状态</th>
+                <th dataname="verify_time" datatype="jsondateNo">完成</th>
+                <th type="eventlist"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function ClearFilter() {
+            $("#searchDomain input").val("");
+        }
+        $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
+        $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
+
+        function showState(item) {
+            switch (item.invite_state) {
+                case 1200:
+                    return "可用";
+                    break;
+                case 1201:
+                    return "禁用";
+                    break;
+            }
+        }
+
+        var grid = $.Nuoya.grid({
+            tableId: "dataTable",
+            //表格id
+            search: {
+                domainId: "searchDomain",
+                subId: "btnSearch"
+            },
+            isForPhone: true,
+            ajaxUrl: "/InviteBill/GetPageList",
+            //数据请求地址
+            pageSize: 10,
+            events: [
+                    {
+                        className: "am-text-secondary",
+                        icon: "icon-pencil-square-o",
+                        name: "审核",
+                        formula: function (item) {
+                            if (item.audit_state == 0) {
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+                        },
+                        click: function (item) {
+                            $.Nuoya.ajaxDialog({
+                                closeViaDimmer: false,
+                                ajaxUrl: "/Areas/Admin/HtmlTemplates/InviteBill/Audit.html",
+                                title: "审核",
+                                callback: function (e) {
+                                },
+                                buttons: [{
+                                    label: "保存",
+                                    callback: function (e) {
+
+                                        var audit_state = $("#form [name='audit_state']").val();
+                                        $.Nuoya.ajaxGet("/admin/InviteBill/audit", { audit_state: audit_state,id:item.id }, function (data) {
+                                            if (data.Code == 0) {
+                                                e.hide();
+                                                grid.reload();
+                                            }
+                                            else
+                                                $.Nuoya.alert(data.Append);
+                                        })
+                                    }
+                                }]
+                            })
+                        }
+                    }
+            ]
+        });
+    </script>
+}

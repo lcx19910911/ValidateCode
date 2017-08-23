@@ -23,6 +23,7 @@ namespace ValidateCode.IService
         /// <returns></returns>
         PageList<invite_bill> GetPageList(int pageIndex, int pageSize, string name,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0);
 
-        //WebResult<bool> AddBill()
+
+        WebResult<bool> Audit(int id, AuditState state);
     }
 }

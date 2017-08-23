@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminUserService.cs" />
+    <Compile Include="InviteService.cs" />
     <Compile Include="ProjectService.cs" />
     <Compile Include="AppUserService.cs" />
     <Compile Include="BaseService.cs" />

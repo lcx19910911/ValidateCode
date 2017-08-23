@@ -69,6 +69,7 @@
     <Compile Include="IInviteBillService.cs" />
     <Compile Include="ISMSInboxService.cs" />
     <Compile Include="ISMSSendService.cs" />
+    <Compile Include="IInviteService.cs" />
     <Compile Include="IWithdrawalsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
