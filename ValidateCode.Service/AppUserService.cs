@@ -24,6 +24,7 @@ namespace ValidateCode.Service
         {
             base.ContextCurrent = HttpContext.Current;
         }
+        private UserTokenService userTokenService;
 
         /// <summary>
         /// 登陆
@@ -42,11 +43,32 @@ namespace ValidateCode.Service
                 }
 
                 var user = Find(x => x.username == name && x.pasword == password && x.statu != EntityStatu.delete);
-                if(user!=null)
+                if (user != null)
                 {
                     user.login_ip = Client.IP;
                     user.login_time = DateTime.Now;
-                }
+
+                    var userToken = new user_token()
+                    {
+                        user_id = user.id,
+                        token = Guid.NewGuid().ToString("N"),
+                        create_time = DateTime.Now,
+                        expire_time = DateTime.Now.AddHours(1),
+                        access_time = DateTime.Now.AddHours(1),
+                        device_ip = this.Client.IP
+                    };
+                    userTokenService = new UserTokenService();
+                    userTokenService.Add(userToken);
+                    Update(user);
+                    Client.LoginUser = new LoginUser()
+                    {
+                        ID = user.id,
+                        Account = user.username,
+                        IsAdmin = false,
+                        Token = userToken.token
+                    };
+                };
+                
                 return Result(user);
             }
         }

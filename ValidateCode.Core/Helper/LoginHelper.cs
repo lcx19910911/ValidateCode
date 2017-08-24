@@ -20,10 +20,20 @@ namespace ValidateCode.Core
         {
             HttpCookie cookie = new HttpCookie(cookieName);
             cookie.Value = CryptoHelper.AES_Encrypt(user.ToJson(), Params.SecretKey);
-            cookie.Expires = DateTime.Now.AddYears(1);
+            cookie.Expires = DateTime.Now.AddHours(1);
             // 写登录Cookie
             HttpContext.Current.Response.Cookies.Remove(cookie.Name);
             HttpContext.Current.Response.Cookies.Add(cookie);
+
+            //userToken
+            if (user.Token.IsNotNullOrEmpty())
+            {
+                HttpCookie userTokencookie = new HttpCookie(Params.UserTokenCookieName);
+                userTokencookie.Value = user.Token;
+                userTokencookie.Expires = DateTime.Now.AddHours(1);
+                HttpContext.Current.Response.Cookies.Remove(userTokencookie.Name);
+                HttpContext.Current.Response.Cookies.Add(userTokencookie);
+            }
         }
 
 

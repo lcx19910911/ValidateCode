@@ -10,6 +10,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using ValidateCode.Core;
 using ValidateCode.Core.Util;
 using ValidateCode.DB;
 using ValidateCode.Model;
@@ -100,5 +101,44 @@ namespace ValidateCode.Web
             }
 
         }
+
+
+        //解决不同浏览器的上传问题
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            try
+            {
+                string user_cookie_name =Params.UserCookieName ;
+                string token_cookie_name = Params.UserTokenCookieName;
+
+                if (HttpContext.Current.Request.Cookies[user_cookie_name] != null)
+                {
+                    RefreshCookie(user_cookie_name);
+                }
+                if (HttpContext.Current.Request.Cookies[token_cookie_name] != null)
+                {
+                    RefreshCookie(token_cookie_name);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+
+        /// <summary>
+        /// 修改cookie
+        /// </summary>
+        /// <param name="cookie_name">cookie名</param>
+        private void RefreshCookie(string cookie_name)
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies.Get(cookie_name);
+            if (null != cookie)
+            {
+                cookie.Expires = DateTime.Now.AddHours(1);
+                HttpContext.Current.Request.Cookies.Set(cookie);
+            }
+        }
+
     }
 }

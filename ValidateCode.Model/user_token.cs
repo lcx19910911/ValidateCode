@@ -24,7 +24,7 @@ namespace ValidateCode.Model
         [StringLength(32)]
         public string device { get; set; }
 
-        public int device_type { get; set; }
+        public int device_type { get; set; } = 0;
 
         [StringLength(32)]
         public string device_ip { get; set; }

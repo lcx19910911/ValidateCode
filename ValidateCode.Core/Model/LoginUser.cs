@@ -35,6 +35,8 @@ namespace ValidateCode.Core.Model
         public string Account { get; set; }
 
 
+        public string Token { get; set; }
+
         /// <summary>
         /// 权限值
         /// </summary>

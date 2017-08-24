@@ -72,6 +72,7 @@
     <Compile Include="InviteBillService.cs" />
     <Compile Include="SMSSendService.cs" />
     <Compile Include="SMSInboxService.cs" />
+    <Compile Include="UserTokenService.cs" />
     <Compile Include="WithdrawalsService.cs" />
   </ItemGroup>
   <ItemGroup>

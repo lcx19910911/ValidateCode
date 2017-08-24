@@ -47,6 +47,7 @@ namespace ValidateCode.Web.App_Start
             container.RegisterType<ISMSSendService, SMSSendService>();
             container.RegisterType<ISMSInboxService, SMSInboxService>();
             container.RegisterType<IInviteBillService, InviteBillService>();
+            container.RegisterType<IUserTokenService, UserTokenService>();
 
             //container.RegisterType<IProductRepository, ProductRepository>
         }

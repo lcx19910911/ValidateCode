@@ -41,7 +41,7 @@ namespace ValidateCode.Web.Filters
 
                 if (controller.LoginUser == null)
                 {
-                    if (!controllerName.Equals("login", StringComparison.OrdinalIgnoreCase))
+                    if (!controllerName.Equals("account", StringComparison.OrdinalIgnoreCase))
                     {
                         var actionMethod = actionMethodList.Where(x => x.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                         if (actionMethod != null)

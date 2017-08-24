@@ -22,13 +22,13 @@ namespace ValidateCode.Model
         public string order_info { get; set; }
 
         [Column(TypeName = "numeric")]
-        public decimal? before_funds { get; set; }
+        public decimal before_funds { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal amount { get; set; }
 
         [Column(TypeName = "numeric")]
-        public decimal? after_funds { get; set; }
+        public decimal after_funds { get; set; }
 
         public DateTime create_time { get; set; }
          

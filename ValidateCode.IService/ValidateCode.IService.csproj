@@ -70,6 +70,7 @@
     <Compile Include="ISMSInboxService.cs" />
     <Compile Include="ISMSSendService.cs" />
     <Compile Include="IInviteService.cs" />
+    <Compile Include="IUserTokenService.cs" />
     <Compile Include="IWithdrawalsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

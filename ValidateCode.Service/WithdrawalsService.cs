@@ -24,6 +24,7 @@ namespace ValidateCode.Service
     public class WithdrawalsService : BaseService<withdrawals>, IWithdrawalsService
     {
         private AppUserService userService;
+       
         public PageList<withdrawals> GetPageList(int pageIndex, int pageSize, string name, DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId = 0)
         {
             using (DbRepository db = new DbRepository())

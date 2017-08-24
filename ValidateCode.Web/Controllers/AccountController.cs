@@ -145,7 +145,6 @@ namespace ValidateCode.Web.Controllers
             {
                 if(result.Result==null)
                     return JResult(new WebResult<bool> { Code = ErrorCode.sys_fail, Result = false, Append = "账号密码错误" });
-                LoginHelper.CreateUser(new LoginUser(result.Result.id,result.Result.username,false), Params.UserCookieName);
             }
             return JResult(result);
 

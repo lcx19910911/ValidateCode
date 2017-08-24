@@ -24,13 +24,15 @@ namespace ValidateCode.Model
 
         public int phone_id { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string text_country { get; set; }
 
         [Required]
         [StringLength(20)]
         public string text_num { get; set; }
+
+        [StringLength(500)]
+        public string text_pdu { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -42,7 +44,7 @@ namespace ValidateCode.Model
 
         public int? send_resault { get; set; }
 
-        public int? bill_statu { get; set; }
+        public int bill_statu { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? price { get; set; }

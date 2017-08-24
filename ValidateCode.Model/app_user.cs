@@ -93,5 +93,6 @@ namespace ValidateCode.Model
 
         [Column(TypeName = "numeric")]
         public decimal funds { get; set; } = 0;
+        
     }
 }

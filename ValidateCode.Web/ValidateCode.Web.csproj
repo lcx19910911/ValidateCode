@@ -184,13 +184,7 @@
     <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Audit.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Withdrawals\Add.html" />
     <Content Include="Global.asax" />
-    <Content Include="Images\1.png" />
-    <Content Include="Images\2.png" />
-    <Content Include="Images\3.png" />
-    <Content Include="Images\4.png" />
     <Content Include="Images\404Pic.png" />
-    <Content Include="Images\5.png" />
-    <Content Include="Images\6.png" />
     <Content Include="Images\loading.jpg" />
     <Content Include="Scripts\amazeui.js" />
     <Content Include="Scripts\amazeui.min.js" />

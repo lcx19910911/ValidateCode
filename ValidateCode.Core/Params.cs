@@ -26,6 +26,10 @@ namespace ValidateCode.Core
         /// 登陆cookie
         /// </summary>
         public static readonly string UserCookieName = "website_user";
+        /// <summary>
+        /// 登陆cookie
+        /// </summary>
+        public static readonly string UserTokenCookieName = "token";
         /// 登陆cookie
         /// </summary>
         public static readonly string AdminCookieName = "website_admin";

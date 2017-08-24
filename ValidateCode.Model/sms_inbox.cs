@@ -22,7 +22,7 @@ namespace ValidateCode.Model
 
         public int? device_id { get; set; }
 
-        public int? phone_id { get; set; }
+        public int phone_id { get; set; }
 
         [Required]
         [StringLength(10)]
@@ -46,9 +46,9 @@ namespace ValidateCode.Model
 
         public DateTime record_time { get; set; }
 
-        public int? read_statu { get; set; }
+        public int read_statu { get; set; }
 
-        public int? bill_statu { get; set; }
+        public int bill_statu { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? price { get; set; }
