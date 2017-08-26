@@ -50,7 +50,7 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         /// 查找
         /// </summary>
         /// <returns></returns>
-        public ActionResult Audit(int id, AuditState audit_state)
+        public ActionResult Audit(int id, BillState audit_state)
         {
             return JResult(IInviteBillService.Audit(id, audit_state));
         }

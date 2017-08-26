@@ -66,5 +66,11 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
             return JResult(result);
         }
 
+        [HttpPost]
+        public ActionResult Add(project model)
+        {
+            var result = IProjectService.Manager(model);
+            return JResult(result);
+        }
     }
 }

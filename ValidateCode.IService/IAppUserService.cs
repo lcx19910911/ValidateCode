@@ -29,6 +29,6 @@ namespace ValidateCode.IService
         List<SelectItem> GetSelectItem(int userId=0);
         WebResult<bool> ChangeInvite(int id,int invite_user_id);
 
-        WebResult<bool> ToInvite();
+        WebResult<bool> ToInvite(int userId=0);
     }
 }

@@ -152,7 +152,7 @@
                             ajaxUrl: "/Areas/Admin/HtmlTemplates/User/Update.html",
                             title: "编辑用户",
                             width: "800px",
-                            height:"500px",
+                            height: "500px",
                             callback: function (e) {
                                 $.Nuoya.action("/Admin/User/Find", { id: item.id }, function (model) {
                                     formInit(model);//表单初始化
@@ -201,16 +201,16 @@
                         buttons: [{
                             label: "保存",
                             callback: function (e) {
-                                    if ($("#form [name='amount']").val() == "") {
-                                        $.Nuoya.alert("请输入固定抽成金额");
-                                    }
+                                if ($("#form [name='amount']").val() == "") {
+                                    $.Nuoya.alert("请输入固定抽成金额");
+                                }
                                 $.Nuoya.form("form").ajaxSubmit({
                                     ajaxUrl: "/Admin/User/Recharge",
                                     params: {
                                         app_user_id: item.id
                                     },
                                     callback: function (data) {
-                                        if (data.Code==0) {
+                                        if (data.Code == 0) {
                                             e.hide();
                                             grid.reload();
                                         }
@@ -234,7 +234,7 @@
                         ajaxUrl: "/Areas/Admin/HtmlTemplates/User/ChangeInviteUser.html",
                         title: "修改上级",
                         callback: function (e) {
-                            $.Nuoya.action("/Admin/User/GetSelectItem", { userId:item.id}, function (json) {
+                            $.Nuoya.action("/Admin/User/GetSelectItem", { userId: item.id }, function (json) {
                                 $(json).each(function () {
                                     $("#form select[name='invite_user_id']").append("<option value='" + this.Value + "' >" + this.Text + "</option>");
                                 });
@@ -244,12 +244,12 @@
                             label: "保存",
                             callback: function (e) {
                                 $.Nuoya.action("/Admin/User/ChangeInvite", { id: item.id, invite_user_id: $("#form [name='invite_user_id']").val() }, function (data) {
-                                        if (data) {
-                                            e.hide();
-                                            grid.reload();
-                                        }
-                                        else
-                                            $.Nuoya.alert("参数错误");
+                                    if (data) {
+                                        e.hide();
+                                        grid.reload();
+                                    }
+                                    else
+                                        $.Nuoya.alert("参数错误");
                                 });
                             }
                         }]
@@ -258,11 +258,35 @@
             }
                 ,
             {
+                className: "am-text-warning",
+                icon: "icon-plus",
+                name: "成为推广员",
+                formula: function (item) {
+                    if (!item.is_invite) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                click: function (item) {
+                    $.Nuoya.action("/Admin/User/ToInvite", { id: item.id, }, function (data) {
+                        if (data) {
+                            e.hide();
+                            grid.reload();
+                        }
+                        else
+                            $.Nuoya.alert("参数错误");
+                    });
+                }
+            }
+                ,
+            {
                 className: "am-text-danger",
                 icon: "icon-hand-rock-o",
                 name: "重置密码",
                 click: function (item) {
-                    changePassword(false,item.id);
+                    changePassword(false, item.id);
                 }
             }
                 ,

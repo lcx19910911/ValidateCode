@@ -24,7 +24,7 @@
     <div class="am-u-lg-12">
         <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-                <button onclick="add()" type="button" class="am-btn am-btn-xs"><span class="am-icon-plus"></span> 新增</button>
+                <button onclick="" type="button" class="am-btn am-btn-xs"><span class="am-icon-plus"></span> 新增项目请联系客服</button>
             </div>
         </div>
     </div>
@@ -34,6 +34,7 @@
         <thead>
             <tr>
                 <th dataname="id" type="checkbox"></th>
+                <th dataname="id">编号</th>
                 <th dataname="name">名称</th>
                 <th dataname="country_code">国家</th>
                 <th dataname="price">价格</th>
@@ -53,34 +54,34 @@
         $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
-        function add()
-        {
-            $.Nuoya.ajaxDialog({
-                closeViaDimmer: false,
-                ajaxUrl: "/Areas/Admin/HtmlTemplates/Project/Add.html",
-                title: "新增项目",
-                callback: function (e) {
-                        formInit();//表单初始化
-                },
-                buttons: [{
-                    label: "保存",
-                    callback: function (e) {
+        //function add()
+        //{
+        //    $.Nuoya.ajaxDialog({
+        //        closeViaDimmer: false,
+        //        ajaxUrl: "/Areas/Admin/HtmlTemplates/Project/Add.html",
+        //        title: "新增项目",
+        //        callback: function (e) {
+        //                formInit();//表单初始化
+        //        },
+        //        buttons: [{
+        //            label: "保存",
+        //            callback: function (e) {
 
-                        $.Nuoya.form("form").ajaxSubmit({
-                            ajaxUrl: "/Project/Add",
-                            callback: function (data) {
-                                if (!data.ErrorDesc) {
-                                    e.hide();
-                                    grid.reload();
-                                }
-                                else
-                                    $.Nuoya.alert(data.ErrorDesc);
-                            }
-                        });
-                    }
-                }]
-            })
-        }
+        //                $.Nuoya.form("form").ajaxSubmit({
+        //                    ajaxUrl: "/Project/Add",
+        //                    callback: function (data) {
+        //                        if (!data.ErrorDesc) {
+        //                            e.hide();
+        //                            grid.reload();
+        //                        }
+        //                        else
+        //                            $.Nuoya.alert(data.ErrorDesc);
+        //                    }
+        //                });
+        //            }
+        //        }]
+        //    })
+        //}
 
 
         function formInit() {

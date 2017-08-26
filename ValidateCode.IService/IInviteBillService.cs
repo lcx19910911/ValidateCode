@@ -24,6 +24,6 @@ namespace ValidateCode.IService
         PageList<invite_bill> GetPageList(int pageIndex, int pageSize, string name,  DateTime? createdTimeStart, DateTime? createdTimeEnd, int userId=0);
 
 
-        WebResult<bool> Audit(int id, AuditState state);
+        WebResult<bool> Audit(int id, BillState state);
     }
 }

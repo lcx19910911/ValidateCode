@@ -36,7 +36,7 @@ namespace ValidateCode.Model
         [Column(TypeName = "numeric")]
         public decimal task_cost { get; set; }
 
-        public int verify_statu { get; set; }
+        public BillState verify_statu { get; set; }
 
         public DateTime? verify_time { get; set; }
 
@@ -69,8 +69,15 @@ namespace ValidateCode.Model
 
         [NotMapped]
         public decimal? price_discount { get; set; }
+       
+    }
 
+    public enum BillState
+    {
+        wait= 2250,
 
-        public AuditState invite_state { get; set; }
+        success=2251,
+
+        reject = 2252,
     }
 }

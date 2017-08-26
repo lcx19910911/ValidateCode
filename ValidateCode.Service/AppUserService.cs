@@ -40,6 +40,7 @@ namespace ValidateCode.Service
                 var realCode = CacheHelper.Get<string>("validate_code" + Client.IP);
                 if (code.IsNullOrEmpty() || !code.Equals(code, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    CacheHelper.Remove("validate_code" + Client.IP);
                     return Result(new app_user() { }, ErrorCode.verification_time_out);
                 }
 
@@ -86,32 +87,13 @@ namespace ValidateCode.Service
                 var realCode = CacheHelper.Get<string>("validate_code" + Client.IP);
                 if (code.IsNullOrEmpty() || !code.Equals(code, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    CacheHelper.Remove("validate_code" + Client.IP);
                     return Result(false, ErrorCode.verification_time_out);
                 }
             }
             var user = Find(model.id);
             if (user == null)
             {
-                //生成用户邀请码
-                var invateCode = new Random().Next(100000, 999999).ToString();
-                var isExit = true;
-                while (isExit)
-                {
-                    if (IsExits(x => x.invite_code == invateCode))
-                    {
-                        invateCode = new Random().Next(100000, 999999).ToString();
-                    }
-                    else
-                    {
-                        isExit = false;
-                        model.invite_code = invateCode;
-                    }
-                }
-                //检查邀请码
-                if (!IsExits(x => x.invite_code == invite_user_code))
-                {
-                    return Result(false, ErrorCode.sys_param_format_error);
-                }
                 var inviteUser = Find(x => x.invite_code == invite_user_code && x.statu == EntityStatu.normal);
                 if (inviteUser == null)
                 {
@@ -239,11 +221,30 @@ namespace ValidateCode.Service
             Update(user);
             return Result(true);
         }
-        public WebResult<bool> ToInvite()
+
+        public WebResult<bool> ToInvite(int userId=0)
         {
-            var user = Find(Client.LoginUser.ID);
+            if (userId == 0)
+                userId = Client.LoginUser.ID;
+            var user = Find(userId);
             if (user == null)
                 return Result(false, ErrorCode.user_not_exit);
+
+            //生成用户邀请码
+            var invateCode = new Random().Next(100000, 999999).ToString();
+            var isExit = true;
+            while (isExit)
+            {
+                if (IsExits(x => x.invite_code == invateCode))
+                {
+                    invateCode = new Random().Next(100000, 999999).ToString();
+                }
+                else
+                {
+                    isExit = false;
+                    user.invite_code = invateCode;
+                }
+            }
             user.is_invite = true;
             Update(user);
             return Result(true);

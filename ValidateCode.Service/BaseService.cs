@@ -79,7 +79,7 @@ namespace ValidateCode.Service
                 foreach (var ID in IDArray)
                 {
                     DbSet<T> dbSet = db.Set<T>();
-                    var entity = dbSet.Find(ID);
+                    var entity = dbSet.Find(ID.GetInt());
                     if (entity != null)
                     {
                         entity.statu = EntityStatu.delete;

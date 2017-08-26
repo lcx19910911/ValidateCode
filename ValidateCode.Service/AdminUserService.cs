@@ -38,6 +38,7 @@ namespace ValidateCode.Service
                 var realCode = CacheHelper.Get<string>("validate_code" + Client.IP);
                 if (code.IsNullOrEmpty() || !code.Equals(code, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    CacheHelper.Remove("validate_code" + Client.IP);
                     return Result(new admin_user() { }, ErrorCode.verification_time_out);
                 }
                 string md5Password = Core.Util.CryptoHelper.MD5_Encrypt(password);

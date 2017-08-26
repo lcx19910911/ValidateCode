@@ -35,7 +35,7 @@ namespace ValidateCode.Service
                 if (userId!=0)
                 {
                     
-                        var query =db.sms_inbox.Where(x=>x.statu==EntityStatu.normal&&x.app_user_id==userId);
+                        var query =db.sms_inbox.Where(x=>x.statu==EntityStatu.smsInbox && x.app_user_id==userId);
                     if (name.IsNotNullOrEmpty())
                     {
                         query = query.Where(x => x.project_name.Contains(name));
@@ -58,7 +58,7 @@ namespace ValidateCode.Service
                 }
                 else
                 {
-                    var query = db.sms_inbox.Where(x=> x.statu == EntityStatu.normal);
+                    var query = db.sms_inbox.Where(x=> x.statu == EntityStatu.smsInbox);
                     if (name.IsNotNullOrEmpty())
                     {
                         query = query.Where(x => x.project_name.Contains(name));

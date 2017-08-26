@@ -30,13 +30,14 @@
         <thead>
             <tr>
                 <th dataname="id" type="checkbox"></th>
-                <th dataname="project_name">项目</th>
-                <th dataname="project_name">项目</th>
-                <th dataname="amount">提成</th>
-                <th dataname="price">价格</th>
-                <th dataname="price_discount">折扣价</th>
+                <th dataname="app_user_name">推广员</th>
+                <th dataname="from_user_name">下级账号</th>
+                <th dataname="project_id">项目编号</th>
+                <th dataname="description">消费内容</th>
+                <th dataname="task_cost">消费金额</th>
+                <th dataname="amount">提成金额</th>
                 <th render="showState">状态</th>
-                <th dataname="verify_time" datatype="jsondateNo">完成</th>
+                <th dataname="verify_time" datatype="jsondateNo">完成时间</th>
                 <th type="eventlist"></th>
             </tr>
         </thead>
@@ -53,12 +54,15 @@
         $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
 
         function showState(item) {
-            switch (item.invite_state) {
-                case 1200:
-                    return "可用";
+            switch (item.verify_statu) {
+                case 2250:
+                    return "未审核";
                     break;
-                case 1201:
-                    return "禁用";
+                case 2251:
+                    return "审核通过";
+                    break;
+                case 2252:
+                    return "未通过";
                     break;
             }
         }
@@ -70,8 +74,7 @@
                 domainId: "searchDomain",
                 subId: "btnSearch"
             },
-            isForPhone: true,
-            ajaxUrl: "/InviteBill/GetPageList",
+            ajaxUrl: "/Admin/InviteBill/GetPageList",
             //数据请求地址
             pageSize: 10,
             events: [
@@ -80,7 +83,7 @@
                         icon: "icon-pencil-square-o",
                         name: "审核",
                         formula: function (item) {
-                            if (item.audit_state == 0) {
+                            if (item.verify_statu == 2250) {
                                 return true;
                             }
                             else {
@@ -99,7 +102,7 @@
                                     callback: function (e) {
 
                                         var audit_state = $("#form [name='audit_state']").val();
-                                        $.Nuoya.ajaxGet("/admin/InviteBill/audit", { audit_state: audit_state,id:item.id }, function (data) {
+                                        $.Nuoya.ajaxGet("/admin/InviteBill/audit", { audit_state: audit_state, id: item.id }, function (data) {
                                             if (data.Code == 0) {
                                                 e.hide();
                                                 grid.reload();

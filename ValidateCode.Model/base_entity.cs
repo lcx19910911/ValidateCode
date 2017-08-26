@@ -21,6 +21,8 @@ namespace ValidateCode.Model
         normal=1100,
         delete=-1,
         locked=1102,
+        smsInbox = 2000,
+        smsSend = 1900,
     }
 
 }

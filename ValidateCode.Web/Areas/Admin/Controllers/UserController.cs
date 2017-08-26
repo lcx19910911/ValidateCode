@@ -139,5 +139,11 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
             return JResult(IAppUserService.GetSelectItem(userId));
         }
 
+
+        public ActionResult ToInvite(int id=0)
+        {
+            return JResult(IAppUserService.ToInvite(id));
+        }
+
     }
 }

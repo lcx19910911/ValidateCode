@@ -22,6 +22,15 @@
         </div>
     </div>
 </div>
+<div class="am-g am-margin-top">
+    <div class="am-u-lg-12">
+        <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+                <button onclick="add()" type="button" class="am-btn am-btn-xs"><span class="am-icon-plus"></span> 新增</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="grid_container">
     <table id="dataTable" class="am-table am-table-striped am-table-hover table-main">
         <thead>
@@ -81,6 +90,47 @@
             
         }
 
+        function add()
+        {
+            $.Nuoya.ajaxDialog({
+                closeViaDimmer: false,
+                ajaxUrl: "/Areas/Admin/HtmlTemplates/Project/Update.html",
+                title: "添加项目",
+                width: "800px",
+                height: "600px",
+                callback: function (e) {
+                },
+                buttons: [{
+                    label: "保存",
+                    callback: function (e) {
+                        if ($("#form [name='divide_type']").val() == "1") {
+                            if ($("#form [name='divide_fixed_amount']").val() == "") {
+                                $.Nuoya.alert("请输入固定抽成金额");
+                            }
+                        }
+                        else {
+                            if ($("#form [name='divide_ratio_value']").val() == "") {
+                                $.Nuoya.alert("请输入固定抽成比率");
+                            }
+                        }
+
+                        $.Nuoya.form("form").ajaxSubmit({
+                            ajaxUrl: "/Admin/Project/Add",
+                            params: {
+                            },
+                            callback: function (data) {
+                                if (!data.ErrorDesc) {
+                                    e.hide();
+                                    grid.reload();
+                                }
+                                else
+                                    $.Nuoya.alert(data.ErrorDesc);
+                            }
+                        });
+                    }
+                }]
+            })
+        }
         function formInit(dataitem) {
             //添加表单验证
             $.Nuoya.form("form").validate({

@@ -24,7 +24,7 @@ namespace ValidateCode.Service
     {
 
         private  InviteService inviteService;
-        private IAppUserService appUserService;
+        private AppUserService appUserService;
 
 
         public PageList<invite_bill> GetPageList(int pageIndex, int pageSize,string name,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
@@ -35,7 +35,7 @@ namespace ValidateCode.Service
                 var count = 0;
                 if (userId != 0)
                 {
-                    var query = db.invite_bill.Where(x => x.statu == EntityStatu.normal && x.app_user_id == userId&&x.invite_state==AuditState.success);
+                    var query = db.invite_bill.Where(x => x.statu == EntityStatu.normal && x.app_user_id == userId&&x.verify_statu== BillState.success);
                     if (name.IsNotNullOrEmpty())
                     {
                         var projectIdList = db.project.Where(x => x.statu == EntityStatu.normal && x.name.Contains(name)).Select(x => x.id).ToList();
@@ -114,7 +114,7 @@ namespace ValidateCode.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public WebResult<bool> Audit(int id, AuditState state)
+        public WebResult<bool> Audit(int id, BillState state)
         {
             if (id <= 0)
             {
@@ -125,12 +125,14 @@ namespace ValidateCode.Service
             {
                 return Result(false, ErrorCode.sys_param_format_error);
             }
-            if (model.invite_state == AuditState.success)
+            if (model.verify_statu == BillState.success)
             {
                 return Result(false, ErrorCode.had_audit);
             }
-            if (state == AuditState.success)
+            model.verify_statu = state;
+            if (state == BillState.success)
             {
+                appUserService = new AppUserService();
                 var user = appUserService.Find(model.app_user_id);
                 var fromUser = appUserService.Find(model.from_user_id);
 
