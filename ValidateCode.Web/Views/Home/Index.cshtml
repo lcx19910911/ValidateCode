@@ -23,7 +23,7 @@
                     <div class="am-fl am-cf">
                         <strong class="am-text-primary am-text-lg">优惠</strong> :<span class="am-text-danger am-text-lg">@(Model.discount)</span>%
                     </div>
-                </div>                
+                </div>
                 <div class="am-cf am-padding am-padding-bottom-sm">
                     <div class="am-fl am-cf">
                         <strong class="am-text-primary am-text-lg">支付宝账号</strong> :<span class="am-text-danger am-text-lg">@(Model.alipay_acc)</span>
@@ -54,11 +54,24 @@
                         <strong class="am-text-primary am-text-lg">手机</strong> :<span class="am-text-danger am-text-lg">@(Model.phone)</span>
                     </div>
                 </div>
-                <div class="am-cf am-padding am-padding-bottom-sm">
-                    <div class="am-fl am-cf">
-                        <strong class="am-text-primary am-text-lg">推广链接</strong> :<span class="am-text-danger am-text-lg">@(CustomHelper.GetValue("Company_SiteUrl")+"/Account/Register?invite_code="+Model.invite_code)</span>
+                @if (Model.is_invite)
+                {
+                    <div class="am-cf am-padding am-padding-bottom-sm">
+                        <div class="am-fl am-cf">
+                            <strong class="am-text-primary am-text-lg">推广链接</strong> :<span class="am-text-danger am-text-lg">@(CustomHelper.GetValue("Company_SiteUrl") + "/Account/Register?invite_code=" + Model.invite_code)</span>
+                        </div>
+                    </div>
+                }
+                else
+                { 
+                    <div class="am-cf am-padding am-padding-bottom-sm">
+                    <div class="am-u-lg-12">
+                        <div class="am-input-group am-input-group-sm">
+                            <span class="am-modal-btn am-btn-primary" onclick="ToInvite()" style="width:10%;height:30px;margin-left:40%;">我要推广</span>
+                        </div>
                     </div>
                 </div>
+                }
                 <div class="am-cf am-padding am-padding-bottom-sm">
                     <div class="am-fl am-cf">
                         <strong class="am-text-primary am-text-lg">注册时间</strong> :<span class="am-text-danger am-text-lg">@(Model.reg_time.ToString("yyyy年MM月dd日"))</span>
@@ -69,4 +82,17 @@
     </div>
 
 </div>
+
+<script>
+    function ToInvite()
+    {
+        $.Nuoya.action("/Home/ToInvite", {}, function (data) {
+            if (data) {
+                window.location.reload();
+            }
+            else
+                $.Nuoya.alert("系统错误");
+        });
+    }
+</script>
 

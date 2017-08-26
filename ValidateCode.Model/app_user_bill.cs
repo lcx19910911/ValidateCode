@@ -31,10 +31,18 @@ namespace ValidateCode.Model
         public decimal after_funds { get; set; }
 
         public DateTime create_time { get; set; }
-         
+
+        public FundsType funds_type { get; set; } = FundsType.funds;
+
+
+
 
     }
-
+    public enum FundsType
+    {
+        funds=1,
+        invite_funds=2,
+    }
 
 
     //1-用户充值  2-接收短信 3-发送短信  4-扣款  5-退款  6-提现  7-推广提成

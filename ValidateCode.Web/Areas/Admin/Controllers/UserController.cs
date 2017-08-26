@@ -84,6 +84,8 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
             model.before_funds = user.funds;
             model.after_funds = user.funds + model.amount;
 
+            if (IRechargeService.IsExits(x=>x.statu==EntityStatu.normal&&x.third_order_id==third_order_id))
+                return JResult(new WebResult<bool> { Code = ErrorCode.third_order_exit, Result = false, Append = "操作失败" });
             var result = IRechargeService.Add(model);
             if (result > 0)
             {
@@ -96,7 +98,7 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
                 bill.app_user_id = model.app_user_id;
                 bill.amount = model.amount;
                 model.before_funds = user.invite_funds;
-                model.after_funds = user.invite_funds - model.amount;
+                model.after_funds = user.invite_funds + model.amount;
                 user.funds += model.amount;
                 IAppUserService.Update(user);
                 using (DbRepository db = new DbRepository())
@@ -122,5 +124,20 @@ namespace ValidateCode.Web.Areas.Admin.Controllers
         {
             return JResult(IAppUserService.ChangePassword(oldPassword, newPassword, cfmPassword, id));
         }
+
+        public ActionResult ChangeInvite(int id, int invite_user_id)
+        {
+            return JResult(IAppUserService.ChangeInvite(id, invite_user_id));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetSelectItem(int userId)
+        {
+            return JResult(IAppUserService.GetSelectItem(userId));
+        }
+
     }
 }

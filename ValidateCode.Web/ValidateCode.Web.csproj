@@ -178,6 +178,7 @@
     <Content Include="Areas\Admin\HtmlTemplates\Project\Update.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Recharge\Index.html" />
     <Content Include="Areas\Admin\HtmlTemplates\Recharge\Add.html" />
+    <Content Include="Areas\Admin\HtmlTemplates\User\ChangeInviteUser.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\ChangePassword.html" />
     <Content Include="Areas\Admin\HtmlTemplates\User\Update.html" />
     <Content Include="Areas\Admin\HtmlTemplates\InviteBill\Audit.html" />
@@ -284,6 +285,8 @@
     <Compile Include="Areas\Admin\Controllers\InviteBillController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProjectController.cs" />
     <Compile Include="Areas\Admin\Controllers\RechargeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SMSInboxController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SmsSendController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\WithdrawalsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -341,6 +344,8 @@
     <Content Include="Views\Home\GetCode.cshtml" />
     <Content Include="NLog.config" />
     <Content Include="Areas\Admin\Views\InviteBill\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SMSInbox\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SMSSend\Index.cshtml" />
     <None Include="Properties\PublishProfiles\codeconfig.pubxml" />
     <Content Include="Views\Account\Update.cshtml" />
     <None Include="Web.Debug.config">

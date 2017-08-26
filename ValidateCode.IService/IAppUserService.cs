@@ -26,5 +26,9 @@ namespace ValidateCode.IService
         WebResult<bool> Manager(app_user model,string code,bool isAdmin,string invite_user_code);
         WebResult<bool> ChangePassword(string oldPassword, string newPassword, string cfmPassword, int id);
 
+        List<SelectItem> GetSelectItem(int userId=0);
+        WebResult<bool> ChangeInvite(int id,int invite_user_id);
+
+        WebResult<bool> ToInvite();
     }
 }

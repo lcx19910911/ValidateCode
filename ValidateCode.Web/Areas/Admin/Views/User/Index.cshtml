@@ -222,6 +222,39 @@
                         }]
                     })
                 }
+            },
+
+            {
+                className: "am-text-success",
+                icon: "icon-pencil-square-o",
+                name: "修改上级",
+                click: function (item) {
+                    $.Nuoya.ajaxDialog({
+                        closeViaDimmer: false,
+                        ajaxUrl: "/Areas/Admin/HtmlTemplates/User/ChangeInviteUser.html",
+                        title: "修改上级",
+                        callback: function (e) {
+                            $.Nuoya.action("/Admin/User/GetSelectItem", { userId:item.id}, function (json) {
+                                $(json).each(function () {
+                                    $("#form select[name='invite_user_id']").append("<option value='" + this.Value + "' >" + this.Text + "</option>");
+                                });
+                            });
+                        },
+                        buttons: [{
+                            label: "保存",
+                            callback: function (e) {
+                                $.Nuoya.action("/Admin/User/ChangeInvite", { id: item.id, invite_user_id: $("#form [name='invite_user_id']").val() }, function (data) {
+                                        if (data) {
+                                            e.hide();
+                                            grid.reload();
+                                        }
+                                        else
+                                            $.Nuoya.alert("参数错误");
+                                });
+                            }
+                        }]
+                    })
+                }
             }
                 ,
             {

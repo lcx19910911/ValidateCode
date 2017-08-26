@@ -39,9 +39,9 @@ namespace ValidateCode.Web.Controllers
         /// <param name="name">名称 - 搜索项</param>
         /// <param name="no">编号 - 搜索项</param>
         /// <returns></returns>
-        public ActionResult GetPageList(int pageIndex, int pageSize,string name, DateTime? createdTimeStart, DateTime? createdTimeEnd)
+        public ActionResult GetPageList(int pageIndex, int pageSize,string name, string phone, DateTime? createdTimeStart, DateTime? createdTimeEnd)
         {
-            return JResult(ISMSSendService.GetPageList(pageIndex, pageSize, name, createdTimeStart, createdTimeEnd, this.LoginUser.ID));
+            return JResult(ISMSSendService.GetPageList(pageIndex, pageSize, name,"", phone, createdTimeStart, createdTimeEnd, this.LoginUser.ID));
         }
     }
 }

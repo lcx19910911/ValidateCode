@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -222,6 +223,53 @@ namespace ValidateCode.Service
             return Result(true);
         }
 
+        public WebResult<bool> ChangeInvite(int id, int invite_user_id)
+        {
+            if (invite_user_id==0 || id == 0)
+            {
+                return Result(false, ErrorCode.sys_param_format_error);
+            }
+            var user = Find(id);
+            if (user == null)
+                return Result(false, ErrorCode.user_not_exit);
+            var inviteUser = Find(invite_user_id);
+            if (inviteUser == null)
+                return Result(false, ErrorCode.user_not_exit);
+            user.invite_user_id = invite_user_id;
+            Update(user);
+            return Result(true);
+        }
+        public WebResult<bool> ToInvite()
+        {
+            var user = Find(Client.LoginUser.ID);
+            if (user == null)
+                return Result(false, ErrorCode.user_not_exit);
+            user.is_invite = true;
+            Update(user);
+            return Result(true);
+        }
+
+
+        /// <summary>
+        /// 下拉框集合
+        /// </summary>
+        /// <param name="">门店id</param>
+        /// <returns></returns>
+        public List<SelectItem> GetSelectItem(int userId=0)
+        {
+            List<SelectItem> list = new List<SelectItem>();
+
+            GetList(x => x.statu == EntityStatu.normal&&(userId ==0? true :x.id!= userId)).OrderBy(x => x.username).ToList().ForEach(x =>
+                        {
+                            list.Add(new SelectItem()
+                            {
+                                Text = x.username,
+                                Value = x.id.ToString()
+                            });
+                        });
+
+            return list;
+        }
 
     }
 }

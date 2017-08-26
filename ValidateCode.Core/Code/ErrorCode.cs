@@ -189,6 +189,12 @@ namespace ValidateCode.Core.Code
         [Description("邀请码错误.")]
         invite_amount_error =706,
 
+
+        /// <summary>
+        /// 第三方支付订单号已存在
+        /// </summary>
+        [Description("第三方支付订单号已存在.")]
+       third_order_exit = 707,
         #endregion
 
 

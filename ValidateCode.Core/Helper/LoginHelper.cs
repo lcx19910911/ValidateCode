@@ -26,7 +26,7 @@ namespace ValidateCode.Core
             HttpContext.Current.Response.Cookies.Add(cookie);
 
             //userToken
-            if (user.Token.IsNotNullOrEmpty())
+            if (user!=null&&user.Token.IsNotNullOrEmpty())
             {
                 HttpCookie userTokencookie = new HttpCookie(Params.UserTokenCookieName);
                 userTokencookie.Value = user.Token;

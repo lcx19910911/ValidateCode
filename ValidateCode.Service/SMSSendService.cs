@@ -26,7 +26,7 @@ namespace ValidateCode.Service
         private AppUserService userService;
 
 
-        public PageList<sms_send> GetPageList(int pageIndex, int pageSize,string name,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
+        public PageList<sms_send> GetPageList(int pageIndex, int pageSize,string name, string userName, string phone,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
         {
             using (DbRepository db = new DbRepository())
             {
@@ -39,6 +39,14 @@ namespace ValidateCode.Service
                     if (name.IsNotNullOrEmpty())
                     {
                             query = query.Where(x => x.project_name.Contains(name));
+                    }
+                    if (phone.IsNotNullOrEmpty())
+                    {
+                        var phoneIdList = db.phone.Where(x => x.statu == EntityStatu.normal && x.num.Contains(phone)).Select(x => x.id).ToList();
+                        if (phoneIdList != null && phoneIdList.Count > 0)
+                        {
+                            query = query.Where(x => phoneIdList.Contains(x.phone_id));
+                        }
                     }
                     if (createdTimeStart != null)
                         {
@@ -58,6 +66,22 @@ namespace ValidateCode.Service
                     if (name.IsNotNullOrEmpty())
                     {
                         query = query.Where(x => x.project_name.Contains(name));
+                    }
+                    if (phone.IsNotNullOrEmpty())
+                    {
+                        var phoneIdList = db.phone.Where(x => x.statu == EntityStatu.normal && x.num.Contains(phone)).Select(x => x.id).ToList();
+                        if (phoneIdList != null && phoneIdList.Count > 0)
+                        {
+                            query = query.Where(x => phoneIdList.Contains(x.phone_id));
+                        }
+                    }
+                    if (userName.IsNotNullOrEmpty())
+                    {
+                        var userIdList = db.app_user.Where(x => x.statu == EntityStatu.normal && x.username.Contains(userName)).Select(x => x.id).ToList();
+                        if (userIdList != null && userIdList.Count > 0)
+                        {
+                            query = query.Where(x => userIdList.Contains(x.app_user_id.Value));
+                        }
                     }
                     if (createdTimeStart != null)
                     {

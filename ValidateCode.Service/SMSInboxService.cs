@@ -26,7 +26,7 @@ namespace ValidateCode.Service
         private AppUserService userService;
 
 
-        public PageList<sms_inbox> GetPageList(int pageIndex, int pageSize,string name,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
+        public PageList<sms_inbox> GetPageList(int pageIndex, int pageSize,string name,string userName,string phone,DateTime? createdTimeStart, DateTime? createdTimeEnd,int userId=0)
         {
             using (DbRepository db = new DbRepository())
             {
@@ -40,17 +40,21 @@ namespace ValidateCode.Service
                     {
                         query = query.Where(x => x.project_name.Contains(name));
                     }
+                    if (phone.IsNotNullOrEmpty())
+                    {
+                        query = query.Where(x => x.phone_num.Contains(phone));
+                    }
                     if (createdTimeStart != null)
                         {
-                            query = query.Where(x => x.receive_time >= createdTimeStart);
+                            query = query.Where(x => x.record_time >= createdTimeStart);
                         }
                         if (createdTimeEnd != null)
                         {
                             createdTimeEnd = createdTimeEnd.Value.AddDays(1);
-                            query = query.Where(x => x.receive_time < createdTimeEnd);
+                            query = query.Where(x => x.record_time < createdTimeEnd);
                         }
                         count = query.Count();
-                        list = query.OrderByDescending(x => x.receive_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();             
+                        list = query.OrderByDescending(x => x.record_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();             
                 }
                 else
                 {
@@ -59,17 +63,29 @@ namespace ValidateCode.Service
                     {
                         query = query.Where(x => x.project_name.Contains(name));
                     }
+                    if (phone.IsNotNullOrEmpty())
+                    {
+                        query = query.Where(x => x.phone_num.Contains(phone));
+                    }
+                    if (userName.IsNotNullOrEmpty())
+                    {
+                        var userIdList = db.app_user.Where(x => x.statu == EntityStatu.normal && x.username.Contains(userName)).Select(x => x.id).ToList();
+                        if (userIdList != null && userIdList.Count > 0)
+                        {
+                            query = query.Where(x => userIdList.Contains(x.app_user_id.Value));
+                        }
+                    }
                     if (createdTimeStart != null)
                     {
-                        query = query.Where(x => x.receive_time >= createdTimeStart);
+                        query = query.Where(x => x.record_time >= createdTimeStart);
                     }
                     if (createdTimeEnd != null)
                     {
                         createdTimeEnd = createdTimeEnd.Value.AddDays(1);
-                        query = query.Where(x => x.receive_time < createdTimeEnd);
+                        query = query.Where(x => x.record_time < createdTimeEnd);
                     }
                     count = query.Count();
-                    list = query.OrderByDescending(x => x.receive_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                    list = query.OrderByDescending(x => x.record_time).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
                 }
 
 

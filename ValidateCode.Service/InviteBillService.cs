@@ -141,6 +141,7 @@ namespace ValidateCode.Service
                     before_funds = user.invite_funds,
                     amount = model.amount,
                     after_funds = user.invite_funds + model.amount,
+                    funds_type=FundsType.invite_funds,
                     app_user_id = model.app_user_id,
                     create_time = DateTime.Now,
                     order_info = $"{user.username}获得推广提成{model.amount}",

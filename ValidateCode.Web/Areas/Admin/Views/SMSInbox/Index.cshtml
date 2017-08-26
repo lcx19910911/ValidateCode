@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "短信接收记录";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><a href="/"><strong class="am-text-primary am-text-lg">首页</strong></a> /<small>短信接收记录</small></div>
+</div>
+<div id="searchDomain">
+    <div class="am-g">
+        <div class="am-u-lg-12">
+            <div class="am-input-group am-input-group-sm">
+                <span class="am-input-group-label">项目名称</span>
+                <input type="text" class="am-form-field" placeholder="按名称搜索" name="name" ;>
+                <span class="am-input-group-label">用户名称</span>
+                <input type="text" class="am-form-field" placeholder="按名称搜索" name="userName" ;>
+                <span class="am-input-group-label">手机号码</span>
+                <input type="text" class="am-form-field" placeholder="按手机号码搜索" name="phone" ;>
+                <span class="am-input-group-label am-margin-left-sm">发送日期</span>
+                <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeStart" readonly style="width:auto;">
+                <span class="am-input-group-label"> - </span>
+                <input type="text" class="am-form-field" placeholder="请选择日期" name="createdTimeEnd" readonly style="width:auto;">
+                <span class="am-input-group-btn am-margin-left-sm">
+                    <button class="am-btn am-btn-default" id="btnSearch" type="button">搜索</button>
+                    <button class="am-btn am-btn-default" onclick="ClearFilter()" type="button">清除</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="am-g am-margin-top">
+    <div class="am-u-lg-12">
+        <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+                <button onclick="add()" type="button" class="am-btn am-btn-xs"><span class="am-icon-plus"></span> 新增</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid_container">
+    <table id="dataTable" class="am-table am-table-striped am-table-hover table-main">
+        <thead>
+            <tr>
+                <th dataname="id" type="checkbox"></th>
+                <th dataname="project_name">项目名称</th>
+                <th dataname="app_user_name">用户</th>
+                <th dataname="phone_num">号码</th>
+                <th dataname="phone_text">短信内容</th>
+                <th dataname="price_discount">价格</th>
+                <th dataname="receive_time" datatype="jsondateNo">接收时间</th>
+                <th type="eventlist"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function ClearFilter() {
+            $("#searchDomain input").val("");
+        }
+        $('[name=createdTimeStart]').datepicker({ format: 'yyyy-mm-dd' });
+        $('[name=createdTimeEnd]').datepicker({ format: 'yyyy-mm-dd' });
+        var grid = $.Nuoya.grid({
+            tableId: "dataTable",
+            //表格id
+            search: {
+                domainId: "searchDomain",
+                subId: "btnSearch"
+            },
+            isForPhone: true,
+            ajaxUrl: "/SMSInbox/GetPageList",
+            //数据请求地址
+            pageSize: 10,
+            events: [
+            ]
+        });
+    </script>
+}

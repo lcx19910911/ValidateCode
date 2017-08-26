@@ -50,6 +50,8 @@ namespace ValidateCode.Model
 
         public int? discount { get; set; } = 100;
 
+        public bool is_invite { get; set; } = false;
+
         [StringLength(6)]
         public string invite_code { get; set; }
 

@@ -66,6 +66,7 @@ namespace ValidateCode.Web.Controllers
             ModelState.Remove("id");
             ModelState.Remove("reg_time");
             ModelState.Remove("pasword");
+            ModelState.Remove("is_invite");
             if (ModelState.IsValid)
             {
                 var result = IUserService.Manager(model, code,false, invite_user_code);

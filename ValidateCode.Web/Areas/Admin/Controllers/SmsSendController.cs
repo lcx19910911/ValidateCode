@@ -9,20 +9,20 @@ using ValidateCode.IService;
 using ValidateCode.Model;
 using ValidateCode.Web.Filters;
 
-namespace ValidateCode.Web.Controllers
+namespace ValidateCode.Web.Areas.Admin.Controllers
 {
     /// <summary>
     /// 用户
     /// </summary>
     [LoginFilter]
-    public class SMSInboxController : BaseController
+    public class SMSSendController : BaseAdminController
     {
-        public ISMSInboxService ISMSInboxService;
+        public ISMSSendService ISMSSendService;
         public IAppUserService IAppUserService;
 
-        public SMSInboxController(ISMSInboxService _ISMSInboxService, IAppUserService _IAppUserService)
+        public SMSSendController(ISMSSendService _ISMSSendService, IAppUserService _IAppUserService)
         {
-            this.ISMSInboxService = _ISMSInboxService;
+            this.ISMSSendService = _ISMSSendService;
             this.IAppUserService = _IAppUserService;
         }
         // GET: 
@@ -39,9 +39,9 @@ namespace ValidateCode.Web.Controllers
         /// <param name="name">名称 - 搜索项</param>
         /// <param name="no">编号 - 搜索项</param>
         /// <returns></returns>
-        public ActionResult GetPageList(int pageIndex, int pageSize,string name,string phone, DateTime? createdTimeStart, DateTime? createdTimeEnd)
+        public ActionResult GetPageList(int pageIndex, int pageSize,string name, string userName, string phone, DateTime? createdTimeStart, DateTime? createdTimeEnd)
         {
-            return JResult(ISMSInboxService.GetPageList(pageIndex, pageSize, name, "",phone, createdTimeStart, createdTimeEnd, this.LoginUser.ID));
+            return JResult(ISMSSendService.GetPageList(pageIndex, pageSize, name, userName, phone, createdTimeStart, createdTimeEnd));
         }
     }
 }

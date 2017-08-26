@@ -28,5 +28,10 @@ namespace ValidateCode.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult ToInvite()
+        {
+            return JResult(IAppUserService.ToInvite());
+        }
     }
 }
