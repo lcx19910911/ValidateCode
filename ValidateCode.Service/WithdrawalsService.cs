@@ -108,6 +108,7 @@ namespace ValidateCode.Service
             {
                 return Result(false, ErrorCode.had_audit);
             }
+            model.audit_state = state;
             if (state == AuditState.success)
             {
                 model.type = type.Value;
@@ -144,7 +145,6 @@ namespace ValidateCode.Service
             }
             else
             {
-                model.audit_state = state;
                 model.audit_time = DateTime.Now;
                 Update(model);
                 return Result(true);
