@@ -94,6 +94,9 @@ namespace ValidateCode.Service
             var user = Find(model.id);
             if (user == null)
             {
+                if (IsExits(x => x.username == model.username))
+                    return Result(false, ErrorCode.user_account_already_exist);
+
                 var inviteUser = Find(x => x.invite_code == invite_user_code && x.statu == EntityStatu.normal);
                 if (inviteUser == null)
                 {
